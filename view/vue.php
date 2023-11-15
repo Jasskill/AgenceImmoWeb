@@ -54,7 +54,70 @@ class vue{
         </div>
       </nav>';
     }
-
+    //Affichage connexion utilisateur
+    public function connexion ($message = null){
+      if($message !=null){
+        echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
+      }
+      echo "
+        <form method='POST' action='index.php?action=connexion'>
+          <h1>Se connecter : </h1>
+          <br/>
+          <div class='form-group'>
+            <label for='mail'> Adresse email </label>
+            <input type='mail' name='mail' class='form-control' id='email' placeholder='votrepseudo@gmail.com' required>
+          </div>
+          <div class='form-group'>
+            <label for='motdepasse'> Mot de passe </label>
+            <input type='password' name='motdepasse' class='form-control' id='motdepasse' placeholder='●●●●●●●' required>
+          </div>
+          <br/>
+          <a href='index.php?action=inscription'> Vous n'êtes pas encore inscrit? Inscrivez-vous ! </a>
+          <br/>
+          <br/>
+          <button type='submit' class='btn btn-primary' name='buttonconnect'>Connexion</button>
+        </form>
+      ";
+      $this->fin();
+    }
+    //Affichage inscription utilisateur
+    public function inscription($message = null){
+      if($message !=null){
+        echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
+      }
+      echo "
+        <form method='POST' action='index.php?action=inscription'>
+          <h1>S'inscrire : </h1>
+          <br/>
+          <div class='form-group'>
+            <label for='nom'>Votre nom</label>
+            <input type='text' name='nom' class='form-control' id='nom' required>
+          </div>
+          <div class='form-group'>
+            <label for='prenom'>Votre prénom</label>
+            <input type='text' name='prenom' class='form-control' id='prenom' required>
+          </div>
+          <div class='form-group'>
+            <label for='nom'>Votre mail</label>
+            <input type='text' name='mail' class='form-control' id='mail'  placeholder='votrepseudo@gmail.com' required>
+          </div>
+          <div class='form-group'>
+            <label for='mdp'>Mot de passe</label>
+            <input type='text' name='mdp' class='form-control' id='mdp'  placeholder='●●●●●●' required>
+          </div>
+          <div class='form-group'>
+            <label for='mdp2'>Confirmer votre mot de passe/label>
+            <input type='text' name='mdp2' class='form-control' id='mdp2' placeholder='●●●●●●' required>
+          </div>
+          <br/>
+          <a href='index.php?action=connexion'>Vous êtes déjà client ? Connectez-vous !</a>
+          <br/>
+          <br/>
+          <button type'submit' class='btn btn-primary' name='buttonregister'>Inscription</button>
+        </form>
+      "; 
+      $this->fin();     
+    }
     public function fin(){
         echo "
         </body>
