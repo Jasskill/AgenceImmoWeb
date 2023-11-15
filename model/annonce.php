@@ -14,7 +14,8 @@ Class annonce{
 
     //Réccupérer les logements dans la base de données
     public function recupererAnnonce(){
-        $stmt = $this->pdo->prepare("SELECT rue, codePostal, ville, id, idProproetaire, COUNT(Piece.id), surface, libelle, lien FROM ")
+        $sql = "SELECT Logement.id, rue, codePostal, ville, idProprietaire, COUNT(Piece.id), SUM(surface) FROM Logement INNER JOIN Piece ON Logement.id = Piece.idLogement GROUP BY Logement.id";
+        $req = $this->pdo->prepare($sql);
     }
 
     //récupperer pieces
