@@ -28,8 +28,8 @@ if(isset($_GET["action"])){
         case "inscription":
             (new controleur)->inscription();
             break;
-        case "acceesPropritaire":
-            (new controleur)->acceesPropritaire();
+        case "accesProprietaire":
+            (new controleur)->accesProprietaire();
             break;
         case "recherche":
             (new controleur)->recherche();
