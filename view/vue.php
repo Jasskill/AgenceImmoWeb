@@ -27,10 +27,10 @@ class vue{
                             <a class="nav-link" href="index.php?action=afficherPageAccueil">Annonces</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=afficherPageCommentaires">Connexion</a>
+                            <a class="nav-link" href="index.php?action=">Connexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=afficherPageArticle&id=1">Inscription</a>
+                            <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
@@ -43,15 +43,8 @@ class vue{
     </body>
     </html>';
     }
-
-    public function accueil(){
-      $this->entete();
-      $this->fin();
-    }
-
     //Affichage connexion utilisateur
     public function connexion ($message = null){
-      $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
@@ -78,7 +71,6 @@ class vue{
     }
     //Affichage inscription utilisateur
     public function inscription($message = null){
-      $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
@@ -147,28 +139,15 @@ class vue{
                     </li>
                 </ul>';
     }
+    public function accueil(){
+
+    }
+    
     public function fin(){
         echo "
         </body>
         </html>";
     }
-    public function erreur404(){
-      http_response_code(404);
-      $this->entete();
-
-      echo "
-        <h1>Erreur 404 : page introuvable !</h1>
-        <br/>
-        <p>
-          Cette page n'existe pas ou a été supprimée !
-        </p>
-      ";
-  
-      $this->fin();
-    }
-  }
-
-
 
 
 ?>
