@@ -19,7 +19,7 @@ class Utilisateur {
         $req->execute();
         $ligne = $req->fetch();
         if($ligne != false){
-            if(password_verify($mdp, $ligne['mdp'])){
+            if(password_verify($password, $ligne['mdp'])){
                 $_SESSION["connect"] = $ligne['id'];
                 return true;
             }
@@ -47,14 +47,13 @@ class Utilisateur {
         } 
     }
     //Inscrire un utilisateur
-    public function inscription($mdp, $nom, $prenom, $mail, $proprietaire){
-        $sql ="INSERT INTO Utilisateur (`mdp`, `nom`,`prenom`,`mail`,`proprietaire`) VALUES (:mdp, :nom, :prenom, :mail, :proprietaire)";
+    public function inscription($mdp, $nom, $prenom, $mail){
+        $sql ="INSERT INTO Utilisateur (`mdp`, `nom`,`prenom`,`mail`) VALUES (:mdp, :nom, :prenom, :mail)";
         $req = $this->pdo->prepare($sql);
         $req->bindParam(":mdp",$mdp, PDO::PARAM_STR);
         $req->bindParam(":nom",$nom, PDO::PARAM_STR);
         $req->bindParam(":prenom", $prenom, PDO::PARAM_STR);
         $req->bindParam(":mail", $mail, PDO::PARAM_STR);
-        $req->bindParam(":proprietaire", $proprietaire, PDO::PARAM_BOOL);
         $req->execute();
     }
     //Récuperer les infos de l'utilisateur
