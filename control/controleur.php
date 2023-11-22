@@ -4,6 +4,10 @@ class Controleur {
     private $vue;
 
     public function __construct() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $this->vue = new Vue();
     }
 
@@ -63,6 +67,9 @@ class Controleur {
         } else {
             $this->vue->inscription();
         }
+    }
+    public function logout(){
+        session_destroy();
     }
 }
 

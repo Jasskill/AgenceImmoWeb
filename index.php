@@ -15,6 +15,7 @@ try {
 require("control/controleur.php");
 require("view/vue.php");
 require("model/Utilisateur.php");
+require("model/annonce.php");
 
 //Routes
 if(isset($_GET["action"])){
@@ -39,6 +40,11 @@ if(isset($_GET["action"])){
             break;
         case "demandeReservation":
             (new controleur)->demandeReservation();
+            break;
+        case "logout":
+            (new controleur)->logout();
+            (new controleur)->accueil();
+            //header("index.php");
             break;
         default:
             //route par default : erreur404
