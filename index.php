@@ -41,6 +41,11 @@ if(isset($_GET["action"])){
         case "demandeReservation":
             (new controleur)->demandeReservation();
             break;
+        case "logout":
+            (new controleur)->logout();
+            (new controleur)->accueil();
+            //header("index.php");
+            break;
         default:
             //route par default : erreur404
             (new controleur)->erreur404();
