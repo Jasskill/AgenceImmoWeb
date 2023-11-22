@@ -1,50 +1,70 @@
 <?php
 class vue{
-    public function entete(){
-        echo '
-        <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <title>Document</title>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <div class="container">
-                <div class="row">
-                    <a class="navbar-brand" href="#">Agence Immo Web</a>
-                </div>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=afficherPageAccueil">Annonces</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=">Connexion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-            </div>
-        </nav>
-    </body>
-    </html>';
+    public function entete() {
+      echo '
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+          <title>Document</title>
+      </head>
+      <body>
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+              <div class="container">
+                  <div class="row">
+                      <a class="navbar-brand" href="#">Agence Immo Web</a>
+                  </div>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                      <ul class="navbar-nav ms-auto">
+                          <li class="nav-item">
+                              <a class="nav-link" href="index.php?action=annonce">Annonces</a>
+                          </li>';
+      // Condition pour afficher le bouton Connexion/Déconnexion
+      if (isset($_SESSION['estconnecte']) && $_SESSION['estconnecte']) {
+          echo '<li class="nav-item">
+                      <a class="nav-link" href="logout.php">Déconnexion</a>
+                  </li>';
+      } else {
+          echo '<li class="nav-item">
+                      <a class="nav-link" href="index.php?action=connexion">Connexion</a>
+                  </li>';
+      }
+
+      echo '<li class="nav-item">
+                  <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
+              </li>
+          </ul>
+          <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+      </div>
+  </div>
+  </nav>
+  </body>
+  </html>';
+  }
+
+
+    public function accueil(){
+      $this->entete();
+      $this->fin();
+    }
+    // Deconnexion utilisateur
+    public function deconnexion ($message = null){
+      $this->entete();
+      session_destroy();
     }
     //Affichage connexion utilisateur
     public function connexion ($message = null){
+      $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
@@ -58,7 +78,7 @@ class vue{
           </div>
           <div class='form-group'>
             <label for='motdepasse'> Mot de passe </label>
-            <input type='password' name='motdepasse' class='form-control' id='motdepasse' placeholder='●●●●●●●' required>
+            <input type='password' name='mdp' class='form-control' id='motdepasse' placeholder='●●●●●●●' required>
           </div>
           <br/>
           <a href='index.php?action=inscription'> Vous n'êtes pas encore inscrit? Inscrivez-vous ! </a>
@@ -92,7 +112,7 @@ class vue{
           </div>
           <div class='form-group'>
             <label for='mdp'>Mot de passe</label>
-            <input type='text' name='mdp' class='form-control' id='mdp'  placeholder='●●●●●●' required>
+            <input type='password' name='mdp' class='form-control' id='mdp'  placeholder='●●●●●●' required>
           </div>
           <div class='form-group'>
             <label for='mdp2'>Confirmer votre mot de passe/label>
@@ -139,15 +159,28 @@ class vue{
                     </li>
                 </ul>';
     }
-    public function accueil(){
-
-    }
-    
     public function fin(){
         echo "
         </body>
         </html>";
     }
+    public function erreur404(){
+      http_response_code(404);
+      $this->entete();
+
+      echo "
+        <h1>Erreur 404 : page introuvable !</h1>
+        <br/>
+        <p>
+          Cette page n'existe pas ou a été supprimée !
+        </p>
+      ";
+  
+      $this->fin();
+    }
+  }
+
+
 
 
 ?>
