@@ -51,6 +51,7 @@ class vue{
 
     //Affichage connexion utilisateur
     public function connexion ($message = null){
+      $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
@@ -77,6 +78,7 @@ class vue{
     }
     //Affichage inscription utilisateur
     public function inscription($message = null){
+      $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
