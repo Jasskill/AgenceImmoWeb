@@ -27,9 +27,9 @@ class vue{
                               <a class="nav-link" href="index.php?action=annonce">Annonces</a>
                           </li>';
       // Condition pour afficher le bouton Connexion/Déconnexion
-      if (isset($_SESSION['estconnecte']) && $_SESSION['estconnecte']) {
+      if (isset($_SESSION['estconnecte'])) {
           echo '<li class="nav-item">
-                      <a class="nav-link" href="logout.php">Déconnexion</a>
+                      <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                   </li>';
       } else {
           echo '<li class="nav-item">
@@ -64,8 +64,10 @@ class vue{
     }
     //Affichage connexion utilisateur
     public function connexion ($message = null){
-      $this->entete();
-      session_start();
+      if (!isset($_SESSION)) {
+        session_start();
+    }
+    $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
@@ -92,6 +94,9 @@ class vue{
     }
     //Affichage inscription utilisateur
     public function inscription($message = null){
+      if (!isset($_SESSION)) {
+        session_start();
+      }
       $this->entete();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
