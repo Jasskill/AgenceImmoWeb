@@ -26,11 +26,10 @@ class vue{
                           <li class="nav-item">
                               <a class="nav-link" href="index.php?action=annonce">Annonces</a>
                           </li>';
-                          
       // Condition pour afficher le bouton Connexion/Déconnexion
       if (isset($_SESSION['estconnecte']) && $_SESSION['estconnecte']) {
           echo '<li class="nav-item">
-                      <a class="nav-link" href="index.php?action=deconnexion">Déconnexion</a>
+                      <a class="nav-link" href="logout.php">Déconnexion</a>
                   </li>';
       } else {
           echo '<li class="nav-item">
@@ -58,10 +57,15 @@ class vue{
       $this->entete();
       $this->fin();
     }
-
+    // Deconnexion utilisateur
+    public function deconnexion ($message = null){
+      $this->entete();
+      session_destroy();
+    }
     //Affichage connexion utilisateur
     public function connexion ($message = null){
       $this->entete();
+      session_start();
       if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
       }
