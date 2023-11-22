@@ -134,12 +134,28 @@ class vue{
                     </li>
                 </ul>';
     }
-    }
     public function fin(){
         echo "
         </body>
         </html>"
     }
+    public function erreur404(){
+      http_response_code(404);
+      $this->entete();
+
+      echo "
+        <h1>Erreur 404 : page introuvable !</h1>
+        <br/>
+        <p>
+          Cette page n'existe pas ou a été supprimée !
+        </p>
+      ";
+  
+      $this->fin();
+    }
+  }
+
+
 
 
 ?>

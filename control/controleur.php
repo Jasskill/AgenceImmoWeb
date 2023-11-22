@@ -3,6 +3,9 @@ class controleur{
     public function accueil() {
 		(new vue)->accueil();
 	}
+	public function erreur404(){
+		(new vue)->erreur404();
+	}
 	//Controleur Connexion
 	public function connexion(){
 		if(isset($_POST['buttonconnect'])){
