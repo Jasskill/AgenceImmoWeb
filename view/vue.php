@@ -48,14 +48,22 @@ class vue{
           </form>
       </div>
   </div>
-  </nav>
-  </body>
-  </html>';
+  </nav>';
   }
 
 
     public function accueil(){
       $this->entete();
+
+      $lesAnnonces = (new annonce)->recupererAnnonce(0, 5);
+      echo '<div class="container">';
+      foreach($lesAnnonces as $annonce){
+        
+        echo $annonce["id"]. " ; ".$annonce["rue"];
+        echo '<br/><br/>';
+        
+      }
+      echo '<div>';
       $this->fin();
     }
 

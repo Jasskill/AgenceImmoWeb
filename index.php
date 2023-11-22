@@ -15,6 +15,7 @@ try {
 require("control/controleur.php");
 require("view/vue.php");
 require("model/Utilisateur.php");
+require("model/annonce.php");
 
 //Routes
 if(isset($_GET["action"])){
