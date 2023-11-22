@@ -42,7 +42,7 @@ if(isset($_GET["action"])){
             break;
         default:
             //route par default : erreur404
-            (new controleur)->erreur404():
+            (new controleur)->erreur404();
             break;
     }
 }else{
