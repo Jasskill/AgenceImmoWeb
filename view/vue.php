@@ -27,10 +27,10 @@ class vue{
                             <a class="nav-link" href="index.php?action=afficherPageAccueil">Annonces</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=afficherPageCommentaires">Connexion</a>
+                            <a class="nav-link" href="index.php?action=connexion">Connexion</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?action=afficherPageArticle&id=1">Inscription</a>
+                            <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
