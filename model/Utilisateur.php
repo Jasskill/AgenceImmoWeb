@@ -1,6 +1,6 @@
 <?php
 class Utilisateur {
-    private $pdo
+    private $pdo;
 
     public function __construct(){
         $config=parse_ini_file("config.ini");
@@ -30,12 +30,12 @@ class Utilisateur {
         }
         else{
             throw new Exception("Utilisateur non trouvé");
-            return false
+            return false;
         }
     }
     //Verifie si l'utilisateur est déjà inscrit
     public function dejaInscrit($mail){
-        $sql "SELECT COUNT(*) AS nombre FROM Utilisateur WHERE mail = :mail";
+        $sql = "SELECT COUNT(*) AS nombre FROM Utilisateur WHERE mail = :mail";
         $req = $this->pdo->prepare($sql);
         $req->bindParam(':mail',$mail, PDO::PARAM_STR);
         $req->execute();
