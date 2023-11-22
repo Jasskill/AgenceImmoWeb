@@ -43,6 +43,12 @@ class vue{
     </body>
     </html>';
     }
+
+    public function accueil(){
+      $this->entete();
+      $this->fin();
+    }
+
     //Affichage connexion utilisateur
     public function connexion ($message = null){
       if($message !=null){
@@ -142,7 +148,7 @@ class vue{
     public function fin(){
         echo "
         </body>
-        </html>"
+        </html>";
     }
     public function erreur404(){
       http_response_code(404);

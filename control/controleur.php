@@ -34,7 +34,7 @@ class controleur{
 				if(!(new utilisateur)->dejaInscrit($mail)) {
 					(new utilisateur)->inscription($mdp, $nom, $prenom, $mail, $proprietaire);
 					(new vue)->connexion();
-					$message =' Inscription réussie ! '
+					$message =' Inscription réussie ! ';
 					echo "<script type='text/javascript'>windows.alert('".$message."');</script>"; 
 				}else{
 					(new vue)->inscription("Le mail est déjà associé à un autre compte ! ");
