@@ -14,7 +14,7 @@ Class annonce{
 
     //Réccupérer les logements dans la base de données
     public function recupererAnnonce($nb1, $nb2){
-        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
+        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
                 WHERE Logement.id IN (SELECT idLogement FROM disponibilite)

@@ -9,6 +9,12 @@ class Vue {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="css/bootstrap.css" rel="stylesheet">
+            <style>
+                body {
+                    background-image: url("view/image-4o0ualio.png"); 
+                    background-repeat: repeat;
+                }
+            </style>
             <title>Document</title>
         </head>
         <body>
@@ -55,23 +61,28 @@ class Vue {
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
         }
         $lesAnnonces = (new Annonce)->recupererAnnonce(0, 5);
-        for($i=0;$i<5;$i++){
         echo '
               <div class="container d-flex justify-content-center main-content">
-                <div class="row">';
-        foreach ($lesAnnonces as $annonce) {
-            echo '
-                    <div class="col">' .
-                        $annonce["id"] . " ; " . $annonce["rue"] . '
-                    </div>';
+                <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+                  <div class="row">';
+                    foreach ($lesAnnonces as $annonce) {
+                        echo '
+                        <div class="col-md-4 mb-4">
+                          <div class="card carte">
+                            <div class="card-body">
+                              <h5 class="card-text">' . $annonce["description"] . '</h5>
+                              <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"]. '</h6>
+                              <img class="card-img" src="https://media.istockphoto.com/id/1289883686/fr/photo/appartement-spacieux-avec-mur-de-fen%C3%AAtre.jpg?s=612x612&w=0&k=20&c=k9Dg_10QHtyZQ4f__8pNPKgKb4DIwuTLdruYqDwoHc0=" alt="Card image cap">
+                            </div>
+                            <li class="list-group-item">Réference : ' . $annonce["id"] . '</li>
+                          </div>
+                        </div>';
         }
-        echo '
-                </div>
-              </div>';
-        }
+        echo '</div></div></div>';
         $this->fin();
-      
     }
+    
+    
   // Deconnexion utilisateur
   public function deconnexion ($message = null){
     $this->entete();
