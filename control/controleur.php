@@ -13,11 +13,11 @@ class Controleur {
 
     public function accueil() {
         $lesAnnonces = (new Annonce)->recupererAnnonces(0, 5);
-        $this->vue->accueil($lesAnnonces);
+        (new vue)->accueil($lesAnnonces);
     }
 
     public function erreur404() {
-        $this->vue->erreur404();
+        (new vue)->erreur404();
     }
 
     // Contrôleur Connexion
@@ -30,13 +30,13 @@ class Controleur {
             
             if ($utilisateur->connexion($mail, $mdp)) {
 				$_SESSION['estconnecte'] = true;
-                $this->vue->accueil();
+                (new vue)->accueil();
                 $message = 'Connexion réussie!';
             } else {
-                $this->vue->connexion("Identifiant ou mot de passe incorrect.");
+                (new vue)->connexion("Identifiant ou mot de passe incorrect.");
             }
         } else {
-            $this->vue->connexion();
+            (new vue)->connexion();
         }
     }
 
@@ -56,17 +56,17 @@ class Controleur {
                 
                 if (!$utilisateur->dejaInscrit($mail)) {
                     $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
-                    $this->vue->connexion();
+                    (new vue)->connexion();
                     $message = 'Inscription réussie !';
                     echo "<script type='text/javascript'>window.alert('" . $message . "');</script>";
                 } else {
-                    $this->vue->inscription("Le mail est déjà associé à un autre compte !");
+                    (new vue)->inscription("Le mail est déjà associé à un autre compte !");
                 }
             } else {
-                $this->vue->inscription("Les deux mots de passe ne sont pas identiques !");
+                (new vue)->inscription("Les deux mots de passe ne sont pas identiques !");
             }
         } else {
-            $this->vue->inscription();
+            (new vue)->inscription();
         }
     }
     public function logout(){

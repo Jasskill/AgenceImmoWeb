@@ -174,7 +174,7 @@ class Vue {
           <div class="container d-flex justify-content-center main-content">
               <div class="container-fluid bg-trasparent my-4 p-2" style="position: relative;">
                   <div class="row">
-                      <div class="col-md-12 mb-6">
+                      <div class="col-md-6 mb-4">
                           <div class="card carte">
                               <div class="card-body">
                                   <a> Coucou </a>
