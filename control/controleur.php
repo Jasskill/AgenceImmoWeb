@@ -12,7 +12,8 @@ class Controleur {
     }
 
     public function accueil() {
-        $this->vue->accueil();
+        $lesAnnonces = (new Annonce)->recupererAnnonces(0, 5);
+        $this->vue->accueil($lesAnnonces);
     }
 
     public function erreur404() {
@@ -70,6 +71,15 @@ class Controleur {
     }
     public function logout(){
         session_destroy();
+    }
+
+    public function demandeReservation(){
+        if(isset($_GET["id"])){
+            $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
+            (new vue)->demandeReservation($annonce);
+        }else{
+            $this->erreur404();
+        }
     }
 }
 
