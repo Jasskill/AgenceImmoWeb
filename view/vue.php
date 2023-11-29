@@ -72,7 +72,7 @@ class Vue {
                             <div class="card-body">
                               <h5 class="card-text">' . $annonce["description"] . '</h5>
                               <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"]. '</h6>
-                              <img class="card-img" src="https://media.istockphoto.com/id/1289883686/fr/photo/appartement-spacieux-avec-mur-de-fen%C3%AAtre.jpg?s=612x612&w=0&k=20&c=k9Dg_10QHtyZQ4f__8pNPKgKb4DIwuTLdruYqDwoHc0=" alt="Card image cap">
+                              <img class="card-img" src="./images/'.$annonce["lienPhoto"].'" alt="Card image cap">
                             </div>
                             <li class="list-group-item">Réference : ' . $annonce["id"] . '</li>
                             <a class="nav-link" href="index.php?action=demandeReservation&id='.$annonce["id"].'">Voir l\'offre</a>
@@ -188,33 +188,14 @@ class Vue {
 
     echo '
           <div class="container d-flex justify-content-center main-content">
-              <div class="container-fluid bg-trasparent my-4 p-2" style="position: relative;">
+              <div class="container-fluid bg-trasparent my-4 p-1" style="position: relative;">
                   <div class="row">
-                      <div class="col-md-12 mb-6">
+                      <div class="col-md-12 mb-4">
                           <div class="card carte">
-                              <div class="card-body">
-                                  <a> Coucou </a>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                          <div class="card carte">
-                              <div class="card-body">
-                                  <a> Coucou </a>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4 mb-4">
-                          <div class="card carte">
-                              <div class="card-body">
-                                  <a> Coucou </a>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4 mb-4">
-                          <div class="card carte">
-                              <div class="card-body">
-                                  <a> Coucou </a>
+                              <div class="card-body text-center">
+                                  <h1> '.$annonce["description"].' </h1>
+                                  <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
+                                  <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
                               </div>
                           </div>
                       </div>
