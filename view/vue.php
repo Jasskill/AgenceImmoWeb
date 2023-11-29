@@ -8,58 +8,56 @@ class Vue {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link href="css/bootstrap.min.css" rel="stylesheet">
+            <link href="css/bootstrap.css" rel="stylesheet">
             <title>Document</title>
         </head>
         <body>
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                            <div class="container">
-                                <a class="navbar-brand" href="index.php">Agence Immo Web</a>
-                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-                                <div class="collapse navbar-collapse" id="navbarNav">
-                                    <ul class="navbar-nav ms-auto">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="index.php?action=annonce">Annonces</a>
-                                        </li>';
-                    // Condition pour afficher le bouton Connexion/Déconnexion
-                    if (isset($_SESSION['estconnecte'])) {
-                        echo '
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
-                                        </li>';
+              <a class="navbar-brand" href="index.php">Agence Immo Web</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=annonce">Annonces</a>
+                  </li>';
+                  // Condition pour afficher le bouton Connexion/Déconnexion
+                  if (isset($_SESSION['estconnecte'])) {
+                    echo '
+                      <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
+                      </li>';
                     } else {
                         echo '
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="index.php?action=connexion">Connexion</a>
-                                        </li>';
+                        <li class="nav-item">
+                          <a class="nav-link" href="index.php?action=connexion">Connexion</a>
+                        </li>';
                     }
-
-                echo '
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
-                                        </li>
-                                    </ul>
-                                    <form class="d-flex" role="search">
-                                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                        <button class="btn btn-outline-success" type="submit">Search</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </div>';
+                    echo '
+                    <li class="nav-item">
+                      <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
+                    </li>
+                </ul>
+                  <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+              </div>
+            </div>
+          </nav>';               
     }
 
-    public function accueil() {
+    public function accueil($message = null) {
         $this->entete();
+        if($message !=null){
+        echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
+        }
         $lesAnnonces = (new Annonce)->recupererAnnonce(0, 5);
         for($i=0;$i<5;$i++){
         echo '
+              <div class="container d-flex justify-content-center main-content">
                 <div class="row">';
         foreach ($lesAnnonces as $annonce) {
             echo '
@@ -68,7 +66,8 @@ class Vue {
                     </div>';
         }
         echo '
-                </div>';
+                </div>
+              </div>';
         }
         $this->fin();
       
@@ -88,7 +87,7 @@ class Vue {
     echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
     }
     echo "
-      <div class='d-flex justify-content-center'>
+      <div class='d-flex justify-content-center main-content'>
         <form method='POST' action='index.php?action=connexion'>
           <h1>Se connecter : </h1>
           <br/>
@@ -117,7 +116,7 @@ class Vue {
       echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
     }
     echo "
-      <div class='d-flex justify-content-center'>
+      <div class='d-flex justify-content-center main-content'>
         <form method='POST' action='index.php?action=inscription'>
           <h1>S'inscrire : </h1>
           <br/>
@@ -153,7 +152,6 @@ class Vue {
   }
   public function fin(){
     echo "
-            </div>
         </body>
         </html>";
   }
