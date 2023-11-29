@@ -12,50 +12,61 @@ class Vue {
             <title>Document</title>
         </head>
         <body>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container">
-                    <a class="navbar-brand" href="index.php">Agence Immo Web</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="index.php?action=annonce">Annonces</a>
-                            </li>';
-        // Condition pour afficher le bouton Connexion/Déconnexion
-        if (isset($_SESSION['estconnecte'])) {
-            echo '<li class="nav-item">
-                        <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
-                    </li>';
-        } else {
-            echo '<li class="nav-item">
-                        <a class="nav-link" href="index.php?action=connexion">Connexion</a>
-                    </li>';
-        }
+            <div class="container">
+                <div class="row">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                        <div class="container">
+                            <a class="navbar-brand" href="index.php">Agence Immo Web</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.php?action=annonce">Annonces</a>
+                                    </li>';
+                // Condition pour afficher le bouton Connexion/Déconnexion
+                if (isset($_SESSION['estconnecte'])) {
+                    echo '
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
+                                    </li>';
+                } else {
+                    echo '
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.php?action=connexion">Connexion</a>
+                                    </li>';
+                }
 
-        echo '<li class="nav-item">
-                    <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
-                </li>
-            </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    </nav>';
+            echo '
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
+                                    </li>
+                                </ul>
+                                <form class="d-flex" role="search">
+                                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                </div>';
     }
 
     public function accueil() {
         $this->entete();
         $lesAnnonces = (new Annonce)->recupererAnnonce(0, 5);
-        echo '<div class="container">';
+        echo '
+                <div class="row">';
         foreach ($lesAnnonces as $annonce) {
-            echo $annonce["id"] . " ; " . $annonce["rue"];
-            echo '<br/><br/>';
+            echo '
+                    <div class="col">' .
+                        $annonce["id"] . " ; " . $annonce["rue"] . '
+                    </div>';
         }
-        echo '</div>';
+        echo '
+                </div>
+            </div>';
         $this->fin();
     }
   // Deconnexion utilisateur
@@ -138,8 +149,9 @@ class Vue {
   }
   public function fin(){
     echo "
-      </body>
-      </html>";
+            </div>
+        </body>
+        </html>";
   }
   public function erreur404(){
     http_response_code(404);
