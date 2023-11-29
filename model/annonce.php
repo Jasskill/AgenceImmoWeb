@@ -14,9 +14,10 @@ Class annonce{
 
     //Récupérer les logements dans la base de données
     public function recupererAnnonces($nb1 = null, $nb2 = null){
-        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
+        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, Photo.lien AS lienPhoto
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
+                INNER JOIN Photo ON Logement.id = Photo.idLogement 
                 WHERE Logement.id IN (SELECT idLogement FROM disponibilite)
                 GROUP BY Logement.id ";
         if($nb1 != null && $nb2 != null){
@@ -31,6 +32,13 @@ Class annonce{
         $res = $req->execute();
         $lesAnnonces = $req->fetchAll();
 
+        foreach($lesAnnonces as $annonce){
+            $sqlPhotos = "SELECT id, lien, idEquipement, idPiece FROM photo WHERE idLogement = :unId";
+            $reqPhotos = $this->pdo->prepare($sqlPhotos);
+            $reqPhotos->bindParam(":unId", $id, \PDO::PARAM_STR);
+            $resPhotos = $reqPhotos->execute();
+            $annonce["lesPhotos"] = $reqPhotos->fetchAll(\PDO::FETCH_ASSOC);
+        }
         return $lesAnnonces;
     }
 
