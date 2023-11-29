@@ -27,23 +27,23 @@ Class annonce{
         $lesAnnonces = $req->fetchAll();
 
         foreach($lesAnnonces as $annonce){
-            $sql = "SELECT id, surface, type FROM piece WHERE idLogement = :leLogement";
-            $req = $this->pdo->prepare($sql);
-            $req->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
-            $res = $req->execute();
-            $annonce["lesPieces"] = $req->fetchAll();
+            $sqlPieces = "SELECT id, surface, type FROM piece WHERE idLogement = :leLogement";
+            $reqPieces = $this->pdo->prepare($sqlPieces);
+            $reqPieces->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
+            $resPieces = $reqPieces->execute();
+            $annonce["lesPieces"] = $reqPieces->fetchAll();
 
-            $sql = "SELECT id, libelle, idPiece FROM equipement WHERE idLogement = :leLogement";
-            $req = $this->pdo->prepare($sql);
-            $req->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
-            $res = $req->execute();
-            $annonce["lesEquipements"] = $req->fetchAll();
+            $sqlEquipements = "SELECT id, libelle, idPiece FROM equipement WHERE idLogement = :leLogement";
+            $reqEquipements = $this->pdo->prepare($sqlEquipements);
+            $reqEquipements->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
+            $resEquipements = $reqEquipements->execute();
+            $annonce["lesEquipements"] = $reqEquipements->fetchAll();
 
-            $sql = "SELECT id, lien, idEquipement, idPiece FROM photo WHERE idLogement = :leLogement";
-            $req = $this->pdo->prepare($sql);
-            $req->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
-            $res = $req->execute();
-            $annonce["lesPhotos"] = $req->fetchAll();
+            $sqlPhotos = "SELECT id, lien, idEquipement, idPiece FROM photo WHERE idLogement = :leLogement";
+            $reqPhotos = $this->pdo->prepare($sqlPhotos);
+            $reqPhotos->bindParam(":leLogement", $annonce["id"], \PDO::PARAM_STR);
+            $resPhotos = $reqPhotos->execute();
+            $annonce["lesPhotos"] = $reqPhotos->fetchAll();
         }
 
         return $lesAnnonces;
