@@ -56,12 +56,11 @@ class Vue {
           
     }
 
-    public function accueil($message = null) {
+    public function accueil($lesAnnonces, $message = null) {
         $this->entete();
         if($message !=null){
         echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
         }
-        $lesAnnonces = (new Annonce)->recupererAnnonce(0, 5);
         echo '
               <div class="container d-flex justify-content-center main-content">
                 <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
@@ -76,6 +75,7 @@ class Vue {
                               <img class="card-img" src="https://media.istockphoto.com/id/1289883686/fr/photo/appartement-spacieux-avec-mur-de-fen%C3%AAtre.jpg?s=612x612&w=0&k=20&c=k9Dg_10QHtyZQ4f__8pNPKgKb4DIwuTLdruYqDwoHc0=" alt="Card image cap">
                             </div>
                             <li class="list-group-item">Réference : ' . $annonce["id"] . '</li>
+                            <a class="nav-link" href="index.php?action=demandeReservation&id='.$annonce["id"].'">Voir l\'offre</a>
                           </div>
                         </div>';
         }
@@ -176,6 +176,48 @@ class Vue {
     echo "
         </body>
         </html>";
+  }
+
+  public function demandeReservation($annonce){
+    $this->entete();
+
+    echo '
+          <div class="container d-flex justify-content-center main-content">
+              <div class="container-fluid bg-trasparent my-4 p-2" style="position: relative;">
+                  <div class="row">
+                      <div class="col-md-12 mb-6">
+                          <div class="card carte">
+                              <div class="card-body">
+                                  <a> Coucou </a>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6 mb-4">
+                          <div class="card carte">
+                              <div class="card-body">
+                                  <a> Coucou </a>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4 mb-4">
+                          <div class="card carte">
+                              <div class="card-body">
+                                  <a> Coucou </a>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4 mb-4">
+                          <div class="card carte">
+                              <div class="card-body">
+                                  <a> Coucou </a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>';
+
+    $this->fin();
   }
   public function erreur404(){
     http_response_code(404);
