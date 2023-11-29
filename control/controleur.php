@@ -34,7 +34,7 @@ class Controleur {
             
             if ($utilisateur->connexion($mail, $mdp)) {
 				$_SESSION['estconnecte'] = true;
-                (new vue)->accueil();
+                (new vue)->accueil($lesAnnonces);
                 $message = 'Connexion réussie!';
             } else {
                 (new vue)->connexion("Identifiant ou mot de passe incorrect.");

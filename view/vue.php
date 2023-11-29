@@ -32,6 +32,7 @@ class Vue {
                   // Condition pour afficher le bouton Connexion/Déconnexion
                   if (isset($_SESSION['estconnecte'])) {
                     echo '
+                      
                       <li class="nav-item">
                         <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                       </li>';
@@ -180,6 +181,8 @@ class Vue {
   public function fin(){
     echo "
         </body>
+        <script src='https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js'></script>
         </html>";
   }
 
