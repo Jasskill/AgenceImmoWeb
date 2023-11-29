@@ -125,7 +125,12 @@ class Vue {
   //recherche
   public function recherche(){
     $this->entete();
-    
+    echo '
+    <form method="GET" class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
+        <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
+    </form>
+    ';
 
     $this->fin();
   }
