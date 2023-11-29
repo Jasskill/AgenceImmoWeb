@@ -32,13 +32,6 @@ Class annonce{
         $res = $req->execute();
         $lesAnnonces = $req->fetchAll();
 
-        foreach($lesAnnonces as $annonce){
-            $sqlPhotos = "SELECT id, lien, idEquipement, idPiece FROM photo WHERE idLogement = :unId";
-            $reqPhotos = $this->pdo->prepare($sqlPhotos);
-            $reqPhotos->bindParam(":unId", $id, \PDO::PARAM_STR);
-            $resPhotos = $reqPhotos->execute();
-            $annonce["lesPhotos"] = $reqPhotos->fetchAll(\PDO::FETCH_ASSOC);
-        }
         return $lesAnnonces;
     }
 
@@ -70,6 +63,8 @@ Class annonce{
         $reqPhotos->bindParam(":unId", $id, \PDO::PARAM_STR);
         $resPhotos = $reqPhotos->execute();
         $annonce["lesPhotos"] = $reqPhotos->fetchAll(\PDO::FETCH_ASSOC);
+
+        
 
         return $annonce;
     }
