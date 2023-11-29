@@ -46,13 +46,14 @@ class Vue {
                       <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
                     </li>
                 </ul>
-                  <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  <form method="GET" class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
+                    <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
                   </form>
               </div>
             </div>
-          </nav>';               
+          </nav>';           
+          
     }
 
     public function accueil($lesAnnonces, $message = null) {
@@ -120,6 +121,21 @@ class Vue {
     ";
     $this->fin();
   }
+
+  //recherche
+  public function recherche(){
+    $this->entete();
+    echo '
+    <form method="GET" class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
+        <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
+    </form>
+    ';
+
+    $this->fin();
+  }
+
+
   //Affichage inscription utilisateur
   public function inscription($message = null){
     $this->entete();

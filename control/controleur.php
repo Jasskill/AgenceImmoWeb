@@ -15,6 +15,10 @@ class Controleur {
         $lesAnnonces = (new Annonce)->recupererAnnonces(0, 5);
         (new vue)->accueil($lesAnnonces);
     }
+    public function rechercher(){
+        $lesAnnonces = (new Annonce)->recupererAnnonces(0,5);
+        $this->vue->recherche($recherche);
+    }
 
     public function erreur404() {
         (new vue)->erreur404();

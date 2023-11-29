@@ -8,7 +8,7 @@ Class annonce{
         try{
             $this->pdo = new \PDO("mysql:host=".$config["host"].";dbname=".$config["database"].";charset=utf8", $config["user"], $config["password"]);
 		} catch(Exception $e) {
-			echo $e->getMessage();
+		    echo $e->getMessage();
 		}
 	}
 
