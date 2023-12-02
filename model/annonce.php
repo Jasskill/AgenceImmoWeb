@@ -14,7 +14,7 @@ Class annonce{
 
     //Récupérer les logements dans la base de données
     public function recupererAnnonces($nb1 = null, $nb2 = null){
-        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, Photo.lien AS lienPhoto
+        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, Photo.lien AS lienPhoto
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
                 INNER JOIN Photo ON Logement.id = Photo.idLogement 
@@ -36,7 +36,7 @@ Class annonce{
     }
 
     public function recupererUneAnnonce($id){
-        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
+        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
                 WHERE Logement.id = :unId
