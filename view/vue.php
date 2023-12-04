@@ -186,7 +186,7 @@ class Vue {
         </html>";
   }
 
-  public function demandeReservation($annonce){
+  public function demandeReservation($annonce, $date1, $date2){
     $this->entete();
 
     echo '
@@ -198,13 +198,12 @@ class Vue {
                               <div class="card-body text-center">
                                   <h1> '.$annonce["description"].' </h1>
                                   <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
-                                  './/Voir les disponibilité de l'annonce
-                                  '
+                                  
                                   <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
-
+                                  <h6> Disbonible du '.$date1.' au '.$date2.'</h6>
                                   <form method="post" action="">
-                                      <p> Date de début de réservation : <input type="date" name="dateDebut" value="" required></p>
-                                      <p> Date de fin de réservation : <input type="date" name="dateFin" value="" required></p>
+                                      <p> Date de début de réservation : <input type="date" name="dateDebut" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
+                                      <p> Date de fin de réservation : <input type="date" name="dateFin" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
                                       <input type="submit" name="valider" value="ok">
                                   </form>
                               </div>

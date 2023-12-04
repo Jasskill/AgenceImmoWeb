@@ -1,31 +1,34 @@
 <?php
-Class annonce{
+class annonce
+{
     private $pdo;
 
-    public function __construct(){
-        $config=parse_ini_file("config.ini");
-        
-        try{
-            $this->pdo = new \PDO("mysql:host=".$config["host"].";dbname=".$config["database"].";charset=utf8", $config["user"], $config["password"]);
-		} catch(Exception $e) {
-		    echo $e->getMessage();
-		}
-	}
+    public function __construct()
+    {
+        $config = parse_ini_file("config.ini");
+
+        try {
+            $this->pdo = new \PDO("mysql:host=" . $config["host"] . ";dbname=" . $config["database"] . ";charset=utf8", $config["user"], $config["password"]);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 
     //Récupérer les logements dans la base de données
-    public function recupererAnnonces($nb1 = null, $nb2 = null){
+    public function recupererAnnonces($nb1 = null, $nb2 = null)
+    {
         $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, Photo.lien AS lienPhoto
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
                 INNER JOIN Photo ON Logement.id = Photo.idLogement 
                 WHERE Logement.id IN (SELECT idLogement FROM disponibilite)
                 GROUP BY Logement.id ";
-        if($nb1 != null && $nb2 != null){
+        if ($nb1 != null && $nb2 != null) {
             $sql .= "LIMIT :n1 , :n2 ;";
         }
-                
+
         $req = $this->pdo->prepare($sql);
-        if($nb1 != null && $nb2 != null){
+        if ($nb1 != null && $nb2 != null) {
             $req->bindParam(":n1", $nb1, \PDO::PARAM_INT);
             $req->bindParam(":n2", $nb2, \PDO::PARAM_INT);
         }
@@ -35,7 +38,8 @@ Class annonce{
         return $lesAnnonces;
     }
 
-    public function recupererUneAnnonce($id){
+    public function recupererUneAnnonce($id)
+    {
         $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
@@ -64,9 +68,12 @@ Class annonce{
         $resPhotos = $reqPhotos->execute();
         $annonce["lesPhotos"] = $reqPhotos->fetchAll(\PDO::FETCH_ASSOC);
 
+        $sqlDisponibilite = "SELECT dateDebut, dateFin, tarif FROM disponibilite WHERE idLogement = :unId";
+        $reqDisponibilite = $this->pdo->prepare($sqlDisponibilite);
+        $reqDisponibilite->bindParam(":unId", $id, \PDO::PARAM_STR);
+        $resDisponibilite = $reqDisponibilite->execute();
+        $annonce["lesDisponibilites"] = $reqDisponibilite->fetch(\PDO::FETCH_ASSOC);
         
-
         return $annonce;
     }
 }
-?>
