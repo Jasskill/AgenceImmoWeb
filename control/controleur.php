@@ -11,9 +11,9 @@ class Controleur {
         $this->vue = new Vue();
     }
 
-    public function accueil() {
+    public function accueil($message = null) {
         $lesAnnonces = (new Annonce)->recupererAnnonces(0, 5);
-        (new vue)->accueil($lesAnnonces);
+        (new vue)->accueil($lesAnnonces, $message);
     }
     public function rechercher(){
         $lesAnnonces = (new Annonce)->recupererAnnonces(0,5);
@@ -25,7 +25,7 @@ class Controleur {
     }
 
     // Contrôleur Connexion
-    public function connexion() {
+    public function connexion($message = null) {
         if (isset($_POST['buttonconnect'])) {
             $mail = htmlspecialchars($_POST['mail']);
             $mdp = htmlspecialchars($_POST['mdp']);
@@ -40,7 +40,7 @@ class Controleur {
                 (new vue)->connexion("Identifiant ou mot de passe incorrect.");
             }
         } else {
-            (new vue)->connexion();
+            (new vue)->connexion($message);
         }
     }
 
@@ -78,11 +78,31 @@ class Controleur {
     }
 
     public function demandeReservation(){
+
         if(isset($_GET["id"])){
-            $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
-            $dateDebut = $this->recupereDate($annonce["lesDisponibilites"]["dateDebut"]);
-            $dateFin = $this->recupereDate($annonce["lesDisponibilites"]["dateFin"]);
-            (new vue)->demandeReservation($annonce, $dateDebut, $dateFin);
+            if(isset($_POST["valider"])){
+                if(isset($_SESSION["connect"])){
+                    $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
+                    $dateDebut = htmlspecialchars($_POST["dateDebut"]);
+                    $dateFin = htmlspecialchars($_POST["dateFin"]);
+                    $idD = htmlspecialchars($_GET["id"]);
+                    (new annonce)->creerReservation($dateDebut, $dateFin, $idD, $_SESSION["connect"]);
+                    if($annonce["lesDisponibilites"]["dateDebut"] != $dateDebut){
+                        (new annonce)->creerDisponibilite($annonce["lesDisponibilites"]["dateDebut"], $dateDebut, $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
+                    }
+                    if($dateFin != $annonce["lesDisponibilites"]["dateFin"]){
+                        (new annonce)->creerDisponibilite($dateFin, $annonce["lesDisponibilites"]["dateFin"], $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
+                    }
+                    $_GET["action"] = "accueil";
+                }else{
+                    $this->connexion("Veuiller vous connecter");
+                }
+            }else{
+                $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
+                $dateDebut = $this->recupereDate($annonce["lesDisponibilites"]["dateDebut"]);
+                $dateFin = $this->recupereDate($annonce["lesDisponibilites"]["dateFin"]);
+                (new vue)->demandeReservation($annonce, $dateDebut, $dateFin);
+            }
         }else{
             $this->erreur404();
         }

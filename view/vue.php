@@ -32,14 +32,10 @@ class Vue {
                   // Condition pour afficher le bouton Connexion/Déconnexion
                   if (isset($_SESSION['estconnecte'])) {
                     echo '
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Interface</a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Je sais pas</a></li>
-                        <li><a class="dropdown-item" href="#">Mes logements</a></li>
-                        <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
-                      </ul>
-                    </li>';
+                      
+                      <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
+                      </li>';
                     } else {
                         echo '
                         <li class="nav-item">
@@ -53,7 +49,7 @@ class Vue {
                 </ul>
                   <form method="GET" class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
-                    <button class="btn btn-outline-primary" type="submit" name="btnRecherche">Rechercher</button>
+                    <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
                   </form>
               </div>
             </div>
