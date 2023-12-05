@@ -46,6 +46,9 @@ if(isset($_GET["action"])){
             (new controleur)->accueil();
             //header("index.php");
             break;
+        case "annonce":
+            (new controleur)->boutonannonce();
+            break;
         default:
             //route par default : erreur404
             (new controleur)->erreur404();

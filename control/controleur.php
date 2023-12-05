@@ -23,7 +23,12 @@ class Controleur {
     public function erreur404() {
         (new vue)->erreur404();
     }
-
+    // Contrôleur Annonce
+    public function boutonannonce(){
+        $lesAnnonces = (new Annonce)->recupererAnnonces();
+        (new vue)->mesannonces($lesAnnonces);
+        
+      }
     // Contrôleur Connexion
     public function connexion() {
         if (isset($_POST['buttonconnect'])) {
