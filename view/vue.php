@@ -14,6 +14,9 @@ class Vue {
                     background-image: url("view/image-4o0ualio.png"); 
                     background-repeat: repeat;
                 }
+                .text-noir {
+                  color: black; /* Changez la couleur selon vos préférences */
+                }
             </style>
             <title>Document</title>
         </head>
@@ -32,19 +35,21 @@ class Vue {
                   // Condition pour afficher le bouton Connexion/Déconnexion
                   if (isset($_SESSION['estconnecte'])) {
                     echo '
+                      
                       <li class="nav-item">
                         <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
                       </li>';
                     } else {
                         echo '
                         <li class="nav-item">
+                          <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
+                        </li>
+                        <li class="nav-item">
                           <a class="nav-link" href="index.php?action=connexion">Connexion</a>
                         </li>';
                     }
                     echo '
-                    <li class="nav-item">
-                      <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
-                    </li>
+                    
                 </ul>
                   <form method="GET" class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
@@ -63,7 +68,7 @@ class Vue {
         }
         echo '
               <div class="container d-flex justify-content-center main-content">
-                <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
+                <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
                   <div class="row">';
                     foreach ($lesAnnonces as $annonce) {
                         echo '
@@ -72,7 +77,7 @@ class Vue {
                             <div class="card-body">
                               <h5 class="card-text">' . $annonce["description"] . '</h5>
                               <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"]. '</h6>
-                              <img class="card-img" src="./images/'.$annonce["lienPhoto"].'" alt="Card image cap">
+                              <img class="card-img" src="./images/'.$annonce["lienPhoto"].'">
                             </div>
                             <li class="list-group-item">Réference : ' . $annonce["id"] . '</li>
                             <a class="nav-link" href="index.php?action=demandeReservation&id='.$annonce["id"].'">Voir l\'offre</a>
@@ -177,31 +182,24 @@ class Vue {
     "; 
     $this->fin();     
   }
-  public function fin(){
-    echo "
-        </body>
-        </html>";
-  }
-
-  public function demandeReservation($annonce){
+  public function demandeReservation($annonce, $date1, $date2){
     $this->entete();
 
     echo '
           <div class="container d-flex justify-content-center main-content">
-              <div class="container-fluid bg-trasparent my-4 p-1" style="position: relative;">
+              <div class="container-fluid bg-transparent my-4 p-1" style="position: relative;">
                   <div class="row">
                       <div class="col-md-12 mb-4">
                           <div class="card carte">
                               <div class="card-body text-center">
                                   <h1> '.$annonce["description"].' </h1>
                                   <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
-                                  './/Voir les disponibilité de l'annonce
-                                  '
+                                  
                                   <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
-
+                                  <h6> Disbonible du '.$date1.' au '.$date2.'</h6>
                                   <form method="post" action="">
-                                      <p> Date de début de réservation : <input type="date" name="dateDebut" value="" required></p>
-                                      <p> Date de fin de réservation : <input type="date" name="dateFin" value="" required></p>
+                                      <p> Date de début de réservation : <input type="date" name="dateDebut" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
+                                      <p> Date de fin de réservation : <input type="date" name="dateFin" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
                                       <input type="submit" name="valider" value="ok">
                                   </form>
                               </div>
@@ -212,7 +210,46 @@ class Vue {
           </div>';
 
     $this->fin();
-  }
+  }  public function mesannonces($lesAnnonces){
+    $this->entete();
+    echo '
+    <div class="container d-flex justify-content-center main-content">
+        <div class="container-fluid bg-transparent my-4 p-3">
+            <div class="row">';
+            foreach ($lesAnnonces as $annonce) {
+              echo '
+                  <div class="col-md-12 mb-4">
+                    <div class="card flex-row">
+                      <img class="card-img-left custom-image" src="./images/' . $annonce["lienPhoto"] . '" style="max-width: 30%;"/>
+                      <div class="card-body d-flex flex-column">
+                        <div id="ici">
+                          <h4 class="card-title h5 h4-sm">' . $annonce["description"] . '</h4>
+                          <p class="card-text">' . $annonce["codePostal"] . " " . $annonce["ville"] . '</p>
+                        </div>
+                        <div class="mt-auto">
+                          <i>Référence :' . $annonce["id"] . '</i>
+                          <a class="float-end" href="index.php?action=demandeReservation&id=' . $annonce["id"] . '">
+                              <i class="fa-solid fa-arrow-right text-noir"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>';
+          }
+    echo '
+            </div>
+        </div>
+    </div>';
+    $this->fin();
+}
+
+
+
+
+
+
+
+
   public function erreur404(){
     http_response_code(404);
     $this->entete();
@@ -226,6 +263,26 @@ class Vue {
     ";
   
     $this->fin();
+  }
+
+
+
+
+
+
+
+
+
+
+
+  public function fin(){
+  echo "
+      </body>
+      <script src='https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+      <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js'></script>
+
+      <script src='https://kit.fontawesome.com/18d92584e8.js' crossorigin='anonymous'></script>
+      </html>";
   }
 }
 ?>

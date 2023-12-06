@@ -12,30 +12,25 @@ Class rechercher{
 	}
 
     //Reccuperer les logements par rapport aux recherches
-
     public function recupAnnonceRecherche(){
-        $requete = "SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
-        FROM Logement 
-        INNER JOIN Piece ON Logement.id = Piece.idLogement 
-        WHERE  
-        Logement.id = :unId
-        GROUP BY Logement.id"
 
-    if(isset($_GET["btnRecherche"]) && !empty($_GET["barRecherche"])){
-        $recherche = htmlspecialchars($_GET["barRecherche"]);
-        $champ = $_GET["barRecherche"];
-        $champ = trim($champ);
-        $champ = strip_tags($champ;)
-    }
+        if(isset($_GET["btnRecherche"]) && !empty($_GET["barRecherche"])){
+            $recherche = htmlspecialchars($_GET["barRecherche"]);
+            $champ = $_GET["barRecherche"];
+            $champ = trim($champ);
+            $champ = strip_tags($champ;)
+
+            $requete = "SELECT * FROM logement 
+            inner join disponibilite on logement.id = disponibilite.idLogement 
+            inner join equipement on logement.id = equipement.idLogement 
+            inner join photo on logement.id = photo.idLogementn 
+            inner join piece on logement.id = piece.idLogement 
+            inner join reservation on logement.id = reservation.idLogement 
+            WHERE description LIKE ? OR ville LIKE ? or libelle like ? or type like ?";
+            $requete->execute(array("%".$champ."%", "%".$champ."%", "%".$champ."%", "%".$champ."%"));
+            $lesRecherche = $requete->fetchAll();
+        }
 
     }
 
 ?>
-
-
-
-
-SELECT Logement.id AS id, rue, codePostal, ville, description, idUtilisateur, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
-                FROM Logement 
-                INNER JOIN Piece ON Logement.id = Piece.idLogement 
-                WHERE Logement.id IN (SELECT idLogement FROM disponibilite)
