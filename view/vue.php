@@ -15,7 +15,13 @@ class Vue {
                     background-repeat: repeat;
                 }
                 .text-noir {
-                  color: black; /* Changez la couleur selon vos préférences */
+                  color: black; 
+                }
+                .btn-text-color {
+                  margin-top: 4%;
+                  background-color : transparent;
+                  color: #7696c9;
+                  border : none;
                 }
             </style>
             <title>Document</title>
@@ -30,30 +36,30 @@ class Vue {
                     <a class="nav-link" href="index.php?action=annonce">Annonces</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=recherche">Rechercher</a>
+                    <a class="nav-link" href="index.php?action=recherche">Rechercher <i class="fa-solid fa-magnifying-glass"></i></a>
                   </li>';
                   // Condition pour afficher le bouton Connexion/Déconnexion
                   if(isset($_SESSION['Proprietaire_session'])) {
                     echo '
                     <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Dropdown button
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">ICI JE SUIS PROPRIO</a></li>
-                        <li><a class="dropdown-item" href="index.php?action=reservation">Voir vos reservations</li>
+                        <li><a class="dropdown-item" href="index.php?action=reservation">Mes Logements</a></li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
                     </div>';
                   } elseif(isset($_SESSION['Client_session'])){
                     echo '
                     <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Dropdown button
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">ICI JE SUIS IENCLI</a></li>
-                        <li><a class="dropdown-item" href="index.php?action=reservation">Voir vos reservations</li>
+                        <li><a class="dropdown-item" href="index.php?action=reservation">Mes Réservations</li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
                     </div>';
@@ -87,14 +93,18 @@ class Vue {
     foreach($lesAnnonces as $annonce) {
       echo '
                         <div class="col-md-4 mb-4">
-                          <div class="card carte">
+                          <div class="card carte h-100">
                             <div class="card-body">
                               <h5 class="card-text">'.$annonce["description"].'</h5>
                               <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"].'</h6>
-                              <img class="card-img" src="./images/'.$annonce["lienPhoto"].'">
+                              <img class="card-img img-fluid" src="./images/'.$annonce["lienPhoto"].'">
                             </div>
-                            <li class="list-group-item">Réference : '.$annonce["id"].'</li>
-                            <a class="nav-link" href="index.php?action=demandeReservation&id='.$annonce["id"].'">Voir l\'offre</a>
+                            <div class="mx-3 mb-3">
+                              <i>Référence :'.$annonce["id"].'</i>
+                              <a class="float-end" href="index.php?action=demandeReservation&id='.$annonce["id"].'">
+                                <i class="fa-solid fa-arrow-right text-noir"></i>
+                              </a>
+                            </div>
                           </div>
                         </div>';
         }
