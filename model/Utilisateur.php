@@ -45,22 +45,21 @@ class Utilisateur {
         if($ligne != false){
             if(password_verify($password, $ligne['mdp'])){
                 if($ligne["Proprietaire"] == 1 ){
-                    return true;
                     $_SESSION["Proprietaire_session"] = $ligne['id'];
+                    return true;
                 }elseif($ligne["Proprietaire"] == 0 )
                 {
-                    return true;
                     $_SESSION["Client_session"] = $ligne['id'];
+                    return true;
                 }
             else{
-                return false;
                 throw new Exception("Mot de passe incorrect");
             }
         }else{
             throw new Exception("Utilisateur non trouvé");
-            return false;
         }
         }
+        return false;
     }
 
 

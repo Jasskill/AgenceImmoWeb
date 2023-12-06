@@ -24,9 +24,6 @@ class Vue {
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
               <a class="navbar-brand" href="index.php">Agence Immo Web</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                   <li class="nav-item">
@@ -35,34 +32,48 @@ class Vue {
                   <li class="nav-item">
                     <a class="nav-link" href="index.php?action=recherche">Rechercher</a>
                   </li>';
-    // Condition pour afficher le bouton Connexion/Déconnexion
-    if(isset($_SESSION['estconnecte'])) {
-      echo '
-                      
+                  // Condition pour afficher le bouton Connexion/Déconnexion
+                  if(isset($_SESSION['Proprietaire_session'])) {
+                    echo '
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown button
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">ICI JE SUIS PROPRIO</a></li>
+                        <li><a class="dropdown-item" href="index.php?action=reservation">Voir vos reservations</li>
+                        <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
+                      </ul>
+                    </div>';
+                  } elseif(isset($_SESSION['Client_session'])){
+                    echo '
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown button
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">ICI JE SUIS IENCLI</a></li>
+                        <li><a class="dropdown-item" href="index.php?action=reservation">Voir vos reservations</li>
+                        <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
+                      </ul>
+                    </div>';
+                  }
+                  else{
+                    echo '
                       <li class="nav-item">
-                        <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
+                        <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
                       </li>
                       <li class="nav-item">
-                          <a class="nav-link" href="index.php?action=reservation">Voir vos reservations</a>
+                        <a class="nav-link" href="index.php?action=connexion">Connexion</a>
                       </li>';
-    } else {
-      echo '
-                        <li class="nav-item">
-                          <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="index.php?action=connexion">Connexion</a>
-                        </li>';
-    }
-    echo '
-                    
+                  }
+                  echo '
                 </ul>
-                  
               </div>
             </div>
           </nav>';
-
   }
+  
 
   public function accueil($lesAnnonces, $message = null) {
     $this->entete();
@@ -226,7 +237,7 @@ class Vue {
                                   <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
                                   
                                   <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
-                                  <h6> Disbonible du '.$date1.' au '.$date2.'</h6>
+                                  <h6> Disponible du '.$date1.' au '.$date2.'</h6>
                                   <form method="post" action="">
                                       <p> Date de début de réservation : <input type="date" name="dateDebut" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
                                       <p> Date de fin de réservation : <input type="date" name="dateFin" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
@@ -337,16 +348,6 @@ class Vue {
 
     $this->fin();
   }
-
-
-
-
-
-
-
-
-
-
   public function fin() {
     echo "
       </body>
