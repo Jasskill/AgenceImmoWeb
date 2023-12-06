@@ -22,12 +22,12 @@ class annonce
                 INNER JOIN Piece ON Logement.id = Piece.idLogement 
                 INNER JOIN Photo ON Logement.id = Photo.idLogement 
                 INNER JOIN disponibilite ON Logement.id = disponibilite.idLogement
-                WHERE valide = 1  
+                WHERE valide = 1 
                 GROUP BY disponibilite.id ";
         if ($nb1 != null && $nb2 != null) {
             $sql .= "LIMIT :n1 , :n2 ;";
         }
-
+        
         $req = $this->pdo->prepare($sql);
         if ($nb1 != null && $nb2 != null) {
             $req->bindParam(":n1", $nb1, \PDO::PARAM_INT);
@@ -36,6 +36,11 @@ class annonce
         $res = $req->execute();
         $lesAnnonces = $req->fetchAll();
 
+        if($res){
+            echo "AAAAAA";
+        }else{
+            echo "BBBBBBB";
+        }
         return $lesAnnonces;
     }
 

@@ -12,11 +12,11 @@ class Controleur {
     }
 
     public function accueil($message = null) {
-        $lesAnnonces = (new Annonce)->recupererAnnonces(0, 5);
+        $lesAnnonces = (new annonce)->recupererAnnonces(0, 5);
         (new vue)->accueil($lesAnnonces, $message);
     }
     public function rechercher(){
-        $lesAnnonces = (new Annonce)->recupererAnnonces(0,5);
+        $lesAnnonces = (new annonce)->recupererAnnonces(0,5);
         (new vue)->recherche($recherche);
     }
 

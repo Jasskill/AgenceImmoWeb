@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 06 déc. 2023 à 12:50
+-- Généré le : mer. 06 déc. 2023 à 13:02
 -- Version du serveur : 5.7.36
 -- Version de PHP : 7.4.26
 
@@ -120,16 +120,16 @@ CREATE TABLE IF NOT EXISTS `logement` (
   `codePostal` varchar(10) NOT NULL,
   `ville` varchar(150) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `idUtilisateur` int(11) DEFAULT NULL,
+  `idProprietaire` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `Logement_Utilisateur_FK` (`idUtilisateur`)
+  KEY `Logement_Utilisateur_FK` (`idProprietaire`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `logement`
 --
 
-INSERT INTO `logement` (`id`, `rue`, `codePostal`, `ville`, `description`, `idUtilisateur`) VALUES
+INSERT INTO `logement` (`id`, `rue`, `codePostal`, `ville`, `description`, `idProprietaire`) VALUES
 (1, '20 rue de la Liberté', '75001', 'Paris', 'Bel appartement près de la Tour Eiffel', 1),
 (2, '5 avenue des Champs-Élysées', '75008', 'Paris', 'Studio moderne au cœur de la ville', 2),
 (3, '10 rue du Vieux Port', '13001', 'Marseille', 'Maison avec vue sur la mer', 3),
