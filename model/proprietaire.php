@@ -21,18 +21,6 @@ class Proprietaire {
         $req->execute();
         return $req->fetchAll();
     }
-
-    //Récuperer les réservations d'un logement passée en paramètre
-    public function lesDisponibilites($idlogement){
-        $sql ='SELECT dateDebut, dateFin FROM disponibilite WHERE idLogement = :id AND valide = 1';
-        $req = $this->pdo->prepare($sql);
-        $req->bindParam(':id',$idlogement, PDO::PARAM_INT);
-        $req->execute();
-        return $req->fetchAll();
-
-    }
-
-
 }
 
 ?>

@@ -11,31 +11,6 @@ class Utilisateur {
 			echo $e->getMessage();
 		}
 	}
-    //Connexion utilisateur
-    
-    /*public function connexion($mail, $password){
-        $sql = "SELECT id, mdp FROM Utilisateur WHERE mail = :mail";
-        $req = $this->pdo->prepare($sql);
-        $req->bindParam(':mail', $mail,PDO::PARAM_STR);
-        $req->execute();
-        $ligne = $req->fetch();
-        if($ligne != false){
-            if(password_verify($password, $ligne['mdp'])){
-                $_SESSION["connect"] = $ligne['id'];
-
-                return true;
-            }
-            else{
-                return false;
-                throw new Exception("Mot de passe incorrect");
-            }
-        }
-        else{
-            throw new Exception("Utilisateur non trouvé");
-            return false;
-        }
-    }*/
-
     public function connexion($mail,$password){
         $sql = 'SELECT id,mdp,Proprietaire FROM Utilisateur WHERE mail =:mail';
         $req = $this->pdo->prepare($sql);
