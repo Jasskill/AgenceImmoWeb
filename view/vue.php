@@ -31,6 +31,9 @@ class Vue {
                 <ul class="navbar-nav ms-auto">
                   <li class="nav-item">
                     <a class="nav-link" href="index.php?action=annonce">Annonces</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=recherche">Rechercher</a>
                   </li>';
                   // Condition pour afficher le bouton Connexion/Déconnexion
                   if (isset($_SESSION['estconnecte'])) {
@@ -51,10 +54,9 @@ class Vue {
                     echo '
                     
                 </ul>
-                  <form method="GET" class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
-                    <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
-                  </form>
+                  
+
+
               </div>
             </div>
           </nav>';           
@@ -63,9 +65,7 @@ class Vue {
 
     public function accueil($lesAnnonces, $message = null) {
         $this->entete();
-        if($message !=null){
-        echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
-        }
+
         echo '
               <div class="container d-flex justify-content-center main-content">
                 <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
@@ -87,10 +87,38 @@ class Vue {
         echo '</div></div></div>';
         $this->fin();
     }
-    
-    
+    public function recherche($lesRecherche){
+      //$this->entete();
+      echo var_dump($lesRecherche);
+      echo '
+
+      <div class="container d-flex justify-content-center main-content">
+      <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
+        <div class="row">
+        <form method="POST" class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
+                    <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
+                  </form>
+        ';
+          foreach ($lesRecherche as $recherche) {
+              echo '
+              <div class="col-md-4 mb-4">
+                <div class="card carte">
+                  <div class="card-body">
+                    <h5 class="card-text">' . $recherche["description"] . '</h5>
+                    <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
+                    <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">
+                  </div>
+                  <li class="list-group-item">Réference : ' . $recherche["id"] . '</li>
+                  <a class="nav-link" href="index.php?action=demandeReservation&id='.$recherche ["id"].'">Voir l\'offre</a>
+                </div>
+              </div>
+          ';
+        }
+        $this->fin();
+    }
   // Deconnexion utilisateur
-  public function deconnexion ($message = null){
+  public function deconnexion($message = null){
     $this->entete();
     session_destroy();
   }
@@ -128,17 +156,7 @@ class Vue {
   }
 
   //recherche
-  public function recherche(){
-    $this->entete();
-    echo '
-    <form method="GET" class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
-        <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
-    </form>
-    ';
-
-    $this->fin();
-  }
+  
 
 
   //Affichage inscription utilisateur

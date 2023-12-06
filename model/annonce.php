@@ -36,11 +36,7 @@ class annonce
         $res = $req->execute();
         $lesAnnonces = $req->fetchAll();
 
-        if($res){
-            echo "AAAAAA";
-        }else{
-            echo "BBBBBBB";
-        }
+        
         return $lesAnnonces;
     }
 
@@ -114,5 +110,45 @@ class annonce
         $req->bindParam(":unTarif", $tarif, \PDO::PARAM_INT);
         $req->bindParam(":uneDerive", $derive, \PDO::PARAM_INT);
         return $req->execute();
+    }
+
+    public function recupAnnonceRecherche(){
+
+        if(isset($_POST["btnRecherche"]) && !empty($_POST["barRecherche"])){
+            $recherche = htmlspecialchars($_POST["barRecherche"]);
+            $champ = $_POST["barRecherche"];
+            $champ = trim($champ);
+            $champ = strip_tags($champ);
+
+            /*
+            $requete = "SELECT * FROM logement 
+            inner join disponibilite on logement.id = disponibilite.idLogement 
+            inner join equipement on logement.id = equipement.idLogement 
+            inner join photo on logement.id = photo.idLogementn 
+            inner join piece on logement.id = piece.idLogement 
+            inner join reservation on logement.id = reservation.idLogement 
+            WHERE description LIKE :description OR ville LIKE :ville or libelle like :libelle or type like :type";
+            */
+            $requete = "select * from logement WHERE description LIKE :description OR ville LIKE :ville";
+            echo $requete;
+            echo $champ;
+            $champ = "%".$champ."%";
+            $req = $this->pdo->prepare($requete);
+            $req->bindParam(":description",$champ, \PDO::PARAM_STR);
+            $req->bindParam(":ville",$champ, \PDO::PARAM_STR);
+            
+            
+            
+            //$req->bind_param("%".$champ."%", "%".$champ."%", "%".$champ."%", "%".$champ."%")
+            //$requete->execute(array("%".$champ."%", "%".$champ."%", "%".$champ."%", "%".$champ."%"));
+            //$lesRecherche = $requete->fetchAll();
+
+            $res = $req->execute();
+            $recherche = $req->fetchAll(\PDO::FETCH_ASSOC);
+
+            return $recherche;
+
+        }
+
     }
 }
