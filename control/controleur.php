@@ -98,7 +98,7 @@ class Controleur {
                     if($dateFin != $annonce["lesDisponibilites"]["dateFin"]){
                         (new annonce)->creerDisponibilite($dateFin, $annonce["lesDisponibilites"]["dateFin"], $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
-                    $_GET["action"] = "accueil";
+                    header("Location: index.php")
                 }else{
                     $this->connexion("Veuiller vous connecter");
                 }
