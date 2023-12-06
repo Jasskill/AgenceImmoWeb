@@ -35,12 +35,6 @@ class annonce
         }
         $res = $req->execute();
         $lesAnnonces = $req->fetchAll();
-
-        if($res){
-            echo "AAAAAA";
-        }else{
-            echo "BBBBBBB";
-        }
         return $lesAnnonces;
     }
 

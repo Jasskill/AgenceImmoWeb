@@ -23,6 +23,11 @@ class Controleur {
     public function erreur404() {
         (new vue)->erreur404();
     }
+
+    public function erreur() {
+        (new vue)->erreur();
+    }
+
     // Contrôleur Annonce
     public function boutonannonce(){
         $lesAnnonces = (new Annonce)->recupererAnnonces();
@@ -108,6 +113,19 @@ class Controleur {
                 $dateDebut = $this->recupereDate($annonce["lesDisponibilites"]["dateDebut"]);
                 $dateFin = $this->recupereDate($annonce["lesDisponibilites"]["dateFin"]);
                 (new vue)->demandeReservation($annonce, $dateDebut, $dateFin);
+            }
+        }else{
+            $this->erreur404();
+        }
+    }
+
+    public function reservation(){
+        if(isset($_SESSION["connect"])){
+            $lesReservations = (new reservation)->recupererReservations($_SESSION["connect"]);
+            if($lesReservations["code"]){
+                (new vue)->reservation($lesReservations);    
+            }else{
+                (new vue)->erreur("Impossible de récupérer les réservations");
             }
         }else{
             $this->erreur404();

@@ -1,7 +1,7 @@
 <?php
 class Vue {
-    public function entete() {
-        echo '
+  public function entete() {
+    echo '
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -32,23 +32,26 @@ class Vue {
                   <li class="nav-item">
                     <a class="nav-link" href="index.php?action=annonce">Annonces</a>
                   </li>';
-                  // Condition pour afficher le bouton Connexion/Déconnexion
-                  if (isset($_SESSION['estconnecte'])) {
-                    echo '
+    // Condition pour afficher le bouton Connexion/Déconnexion
+    if(isset($_SESSION['estconnecte'])) {
+      echo '
                       
                       <li class="nav-item">
                         <a class="nav-link" href="index.php?action=logout">Déconnexion</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="index.php?action=reservation">Voir vos reservations</a>
                       </li>';
-                    } else {
-                        echo '
+    } else {
+      echo '
                         <li class="nav-item">
                           <a class="nav-link" href="index.php?action=inscription&id=1">Inscription</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="index.php?action=connexion">Connexion</a>
                         </li>';
-                    }
-                    echo '
+    }
+    echo '
                     
                 </ul>
                   <form method="GET" class="d-flex" role="search">
@@ -57,51 +60,51 @@ class Vue {
                   </form>
               </div>
             </div>
-          </nav>';           
-          
-    }
+          </nav>';
 
-    public function accueil($lesAnnonces, $message = null) {
-        $this->entete();
-        if($message !=null){
-        echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
-        }
-        echo '
+  }
+
+  public function accueil($lesAnnonces, $message = null) {
+    $this->entete();
+    if($message != null) {
+      echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
+    }
+    echo '
               <div class="container d-flex justify-content-center main-content">
                 <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
                   <div class="row">';
-                    foreach ($lesAnnonces as $annonce) {
-                        echo '
+    foreach($lesAnnonces as $annonce) {
+      echo '
                         <div class="col-md-4 mb-4">
                           <div class="card carte">
                             <div class="card-body">
-                              <h5 class="card-text">' . $annonce["description"] . '</h5>
-                              <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"]. '</h6>
+                              <h5 class="card-text">'.$annonce["description"].'</h5>
+                              <h6 class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"].'</h6>
                               <img class="card-img" src="./images/'.$annonce["lienPhoto"].'">
                             </div>
-                            <li class="list-group-item">Réference : ' . $annonce["id"] . '</li>
+                            <li class="list-group-item">Réference : '.$annonce["id"].'</li>
                             <a class="nav-link" href="index.php?action=demandeReservation&id='.$annonce["id"].'">Voir l\'offre</a>
                           </div>
                         </div>';
-        }
-        echo '</div></div></div>';
-        $this->fin();
     }
-    
-    
+    echo '</div></div></div>';
+    $this->fin();
+  }
+
+
   // Deconnexion utilisateur
-  public function deconnexion ($message = null){
+  public function deconnexion($message = null) {
     $this->entete();
     session_destroy();
   }
   //Affichage connexion utilisateur
-  public function connexion ($message = null){
-    if (!isset($_SESSION)) {
+  public function connexion($message = null) {
+    if(!isset($_SESSION)) {
       session_start();
-  }
-  $this->entete();
-  if($message !=null){
-    echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
+    }
+    $this->entete();
+    if($message != null) {
+      echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
     }
     echo "
       <div class='d-flex justify-content-center main-content'>
@@ -128,7 +131,7 @@ class Vue {
   }
 
   //recherche
-  public function recherche(){
+  public function recherche() {
     $this->entete();
     echo '
     <form method="GET" class="d-flex" role="search">
@@ -142,9 +145,9 @@ class Vue {
 
 
   //Affichage inscription utilisateur
-  public function inscription($message = null){
+  public function inscription($message = null) {
     $this->entete();
-    if($message !=null){
+    if($message != null) {
       echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
     }
     echo "
@@ -179,10 +182,10 @@ class Vue {
           <button type'submit' class='btn btn-secondary' name='buttonregister'>Inscription</button>
         </form>
       </div>
-    "; 
-    $this->fin();     
+    ";
+    $this->fin();
   }
-  public function demandeReservation($annonce, $date1, $date2){
+  public function demandeReservation($annonce, $date1, $date2) {
     $this->entete();
 
     echo '
@@ -210,47 +213,71 @@ class Vue {
           </div>';
 
     $this->fin();
-  }  public function mesannonces($lesAnnonces){
+  }
+  public function mesannonces($lesAnnonces) {
     $this->entete();
     echo '
     <div class="container d-flex justify-content-center main-content">
         <div class="container-fluid bg-transparent my-4 p-3">
             <div class="row">';
-            foreach ($lesAnnonces as $annonce) {
-              echo '
+    foreach($lesAnnonces as $annonce) {
+      echo '
                   <div class="col-md-12 mb-4">
                     <div class="card flex-row">
-                      <img class="card-img-left custom-image" src="./images/' . $annonce["lienPhoto"] . '" style="max-width: 30%;"/>
+                      <img class="card-img-left custom-image" src="./images/'.$annonce["lienPhoto"].'" style="max-width: 30%;"/>
                       <div class="card-body d-flex flex-column">
                         <div id="ici">
-                          <h4 class="card-title h5 h4-sm">' . $annonce["description"] . '</h4>
-                          <p class="card-text">' . $annonce["codePostal"] . " " . $annonce["ville"] . '</p>
+                          <h4 class="card-title h5 h4-sm">'.$annonce["description"].'</h4>
+                          <p class="card-text">'.$annonce["codePostal"]." ".$annonce["ville"].'</p>
                         </div>
                         <div class="mt-auto">
-                          <i>Référence :' . $annonce["id"] . '</i>
-                          <a class="float-end" href="index.php?action=demandeReservation&id=' . $annonce["id"] . '">
+                          <i>Référence :'.$annonce["id"].'</i>
+                          <a class="float-end" href="index.php?action=demandeReservation&id='.$annonce["id"].'">
                               <i class="fa-solid fa-arrow-right text-noir"></i>
                           </a>
                         </div>
                       </div>
                     </div>
                   </div>';
-          }
+    }
     echo '
             </div>
         </div>
     </div>';
     $this->fin();
-}
+  }
+
+  public function reservation($lesReservations) {
+    $this->entete();
+
+    echo '
+  <div class="container d-flex justify-content-center main-content">
+  <div class="container-fluid bg-transparent my-4 p-3">
+      <div class="row">';
+    foreach($lesReservations as $reservation) {
+      echo '
+            <div class="col-md-12 mb-4">
+              <div class="card flex-row">
+                <div class="card-body d-flex flex-column">
+                  '.$reservation["dateDebut"].'
+                </div>
+              </div>
+            </div>';
+    }
+    echo '
+        </div>
+  </div>
+  </div>';
+
+    $this->fin();
+  }
 
 
 
 
 
 
-
-
-  public function erreur404(){
+  public function erreur404() {
     http_response_code(404);
     $this->entete();
 
@@ -261,7 +288,26 @@ class Vue {
         Cette page n'existe pas ou a été supprimée !
       </p>
     ";
-  
+
+    $this->fin();
+  }
+
+  public function erreur($message = null) {
+    $this->entete();
+
+    echo '
+    <div class="container d-flex justify-content-center main-content">
+    <div class="container-fluid bg-transparent my-4 p-3">
+        <div class="row">';
+        if($message != null){
+          echo '<h1>Erreur  : '.$message.'</h1>';
+        }
+      echo '
+      <br/></div>
+      </div>
+      </div>
+    ';
+
     $this->fin();
   }
 
@@ -274,9 +320,8 @@ class Vue {
 
 
 
-
-  public function fin(){
-  echo "
+  public function fin() {
+    echo "
       </body>
       <script src='https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
       <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js'></script>
