@@ -13,11 +13,12 @@ class Controleur {
 
     public function accueil($message = null) {
         $lesAnnonces = (new annonce)->recupererAnnonces(0, 5);
+        $lesRecherche = (new annonce)->recupAnnonceRecherche(0,5);
         (new vue)->accueil($lesAnnonces, $message);
     }
-    public function rechercher(){
-        $lesAnnonces = (new annonce)->recupererAnnonces(0,5);
-        (new vue)->recherche($recherche);
+    public function recherche(){
+        $lesRecherche = (new annonce)->recupAnnonceRecherche();
+        (new vue)->recherche($lesRecherche);
     }
 
     public function erreur404() {

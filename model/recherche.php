@@ -14,6 +14,8 @@ Class rechercher{
     //Reccuperer les logements par rapport aux recherches
     public function recupAnnonceRecherche(){
 
+        echo var_dump($_GET);
+
         if(isset($_GET["btnRecherche"]) && !empty($_GET["barRecherche"])){
             $recherche = htmlspecialchars($_GET["barRecherche"]);
             $champ = $_GET["barRecherche"];
@@ -27,8 +29,11 @@ Class rechercher{
             inner join piece on logement.id = piece.idLogement 
             inner join reservation on logement.id = reservation.idLogement 
             WHERE description LIKE ? OR ville LIKE ? or libelle like ? or type like ?";
+            echo $requete;
             $requete->execute(array("%".$champ."%", "%".$champ."%", "%".$champ."%", "%".$champ."%"));
             $lesRecherche = $requete->fetchAll();
+
+            return $lesRecherche;
         }
 
     }
