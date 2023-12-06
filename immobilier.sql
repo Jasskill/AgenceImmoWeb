@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 06 déc. 2023 à 12:43
+-- Généré le : mer. 06 déc. 2023 à 12:50
 -- Version du serveur : 5.7.36
 -- Version de PHP : 7.4.26
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `disponibilite` (
   `idLogement` int(11) NOT NULL,
   `tarif` decimal(10,0) NOT NULL,
   `valide` tinyint(1) NOT NULL,
-  `derive` int(11) NOT NULL,
+  `derive` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idLogement` (`idLogement`),
   KEY `derive` (`derive`)
@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS `disponibilite` (
 --
 
 INSERT INTO `disponibilite` (`id`, `dateDebut`, `dateFin`, `idLogement`, `tarif`, `valide`, `derive`) VALUES
-(1, '2023-12-01', '2023-12-07', 1, '120', 0, 0),
-(2, '2023-11-25', '2023-11-30', 2, '90', 0, 0),
-(3, '2024-01-10', '2024-01-20', 3, '150', 0, 0),
-(4, '2023-12-15', '2023-12-20', 4, '100', 0, 0),
-(5, '2024-02-01', '2024-02-10', 5, '130', 0, 0);
+(1, '2023-12-01', '2023-12-07', 1, '120', 1, 0),
+(2, '2023-11-25', '2023-11-30', 2, '90', 1, 0),
+(3, '2024-01-10', '2024-01-20', 3, '150', 1, 0),
+(4, '2023-12-15', '2023-12-20', 4, '100', 1, 0),
+(5, '2024-02-01', '2024-02-10', 5, '130', 1, 0);
 
 -- --------------------------------------------------------
 
