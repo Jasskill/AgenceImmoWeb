@@ -12,7 +12,8 @@ class Utilisateur {
 		}
 	}
     //Connexion utilisateur
-    public function connexion($mail, $password){
+    
+    /*public function connexion($mail, $password){
         $sql = "SELECT id, mdp FROM Utilisateur WHERE mail = :mail";
         $req = $this->pdo->prepare($sql);
         $req->bindParam(':mail', $mail,PDO::PARAM_STR);
@@ -21,6 +22,7 @@ class Utilisateur {
         if($ligne != false){
             if(password_verify($password, $ligne['mdp'])){
                 $_SESSION["connect"] = $ligne['id'];
+
                 return true;
             }
             else{
@@ -32,7 +34,36 @@ class Utilisateur {
             throw new Exception("Utilisateur non trouvé");
             return false;
         }
+    }*/
+
+    public function connexion($mail,$password){
+        $sql = 'SELECT id,mdp,Proprietaire FROM Utilisateur WHERE mail =:mail';
+        $req = $this->pdo->prepare($sql);
+        $req->bindParam(':mail',$mail,PDO::PARAM_STR);
+        $req->execute();
+        $ligne = $req->fetch();
+        if($ligne != false){
+            if(password_verify($password, $ligne['mdp'])){
+                if($ligne["Proprietaire"] == 1 ){
+                    return true;
+                    $_SESSION["Proprietaire_session"] = $ligne['id'];
+                }elseif($ligne["Proprietaire"] == 0 )
+                {
+                    return true;
+                    $_SESSION["Client_session"] = $ligne['id'];
+                }
+            else{
+                return false;
+                throw new Exception("Mot de passe incorrect");
+            }
+        }else{
+            throw new Exception("Utilisateur non trouvé");
+            return false;
+        }
+        }
     }
+
+
     //Verifie si l'utilisateur est déjà inscrit
     public function dejaInscrit($mail){
         $sql = "SELECT COUNT(*) AS nombre FROM Utilisateur WHERE mail = :mail";
