@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : sam. 02 déc. 2023 à 13:14
--- Version du serveur : 8.0.31
--- Version de PHP : 8.0.26
+-- Généré le : mer. 06 déc. 2023 à 13:02
+-- Version du serveur : 5.7.36
+-- Version de PHP : 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,25 +29,28 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `disponibilite`;
 CREATE TABLE IF NOT EXISTS `disponibilite` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateDebut` date NOT NULL,
   `dateFin` date NOT NULL,
-  `idLogement` int NOT NULL,
+  `idLogement` int(11) NOT NULL,
   `tarif` decimal(10,0) NOT NULL,
+  `valide` tinyint(1) NOT NULL,
+  `derive` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idLogement` (`idLogement`)
+  KEY `idLogement` (`idLogement`),
+  KEY `derive` (`derive`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `disponibilite`
 --
 
-INSERT INTO `disponibilite` (`id`, `dateDebut`, `dateFin`, `idLogement`, `tarif`) VALUES
-(1, '2023-12-01', '2023-12-07', 1, '120'),
-(2, '2023-11-25', '2023-11-30', 2, '90'),
-(3, '2024-01-10', '2024-01-20', 3, '150'),
-(4, '2023-12-15', '2023-12-20', 4, '100'),
-(5, '2024-02-01', '2024-02-10', 5, '130');
+INSERT INTO `disponibilite` (`id`, `dateDebut`, `dateFin`, `idLogement`, `tarif`, `valide`, `derive`) VALUES
+(1, '2023-12-01', '2023-12-07', 1, '120', 1, 0),
+(2, '2023-11-25', '2023-11-30', 2, '90', 1, 0),
+(3, '2024-01-10', '2024-01-20', 3, '150', 1, 0),
+(4, '2023-12-15', '2023-12-20', 4, '100', 1, 0),
+(5, '2024-02-01', '2024-02-10', 5, '130', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -57,10 +60,10 @@ INSERT INTO `disponibilite` (`id`, `dateDebut`, `dateFin`, `idLogement`, `tarif`
 
 DROP TABLE IF EXISTS `equipement`;
 CREATE TABLE IF NOT EXISTS `equipement` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(100) NOT NULL,
-  `idPiece` int NOT NULL,
-  `idLogement` int NOT NULL,
+  `idPiece` int(11) NOT NULL,
+  `idLogement` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Equipement_Piece_FK` (`idPiece`),
   KEY `idLogement` (`idLogement`)
@@ -112,12 +115,12 @@ INSERT INTO `equipement` (`id`, `libelle`, `idPiece`, `idLogement`) VALUES
 
 DROP TABLE IF EXISTS `logement`;
 CREATE TABLE IF NOT EXISTS `logement` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `rue` varchar(200) NOT NULL,
   `codePostal` varchar(10) NOT NULL,
   `ville` varchar(150) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `idProprietaire` int DEFAULT NULL,
+  `idProprietaire` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `Logement_Utilisateur_FK` (`idProprietaire`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
@@ -129,10 +132,10 @@ CREATE TABLE IF NOT EXISTS `logement` (
 INSERT INTO `logement` (`id`, `rue`, `codePostal`, `ville`, `description`, `idProprietaire`) VALUES
 (1, '20 rue de la Liberté', '75001', 'Paris', 'Bel appartement près de la Tour Eiffel', 1),
 (2, '5 avenue des Champs-Élysées', '75008', 'Paris', 'Studio moderne au cœur de la ville', 2),
-(3, '10 rue du Vieux Port', '13001', 'Marseille', 'Maison avec vue sur la mer', 2),
-(4, '25 rue de la République', '69001', 'Lyon', 'Appartement en plein centre-ville', 1),
+(3, '10 rue du Vieux Port', '13001', 'Marseille', 'Maison avec vue sur la mer', 3),
+(4, '25 rue de la République', '69001', 'Lyon', 'Appartement en plein centre-ville', 4),
 (5, '8 rue Saint-Michel', '33000', 'Bordeaux', 'Duplex élégant près de la Garonne', 5),
-(6, '30 rue de la Paix', '75002', 'Paris', 'Appartement lumineux en plein centre-ville', 5);
+(6, '30 rue de la Paix', '75002', 'Paris', 'Appartement lumineux en plein centre-ville', 3);
 
 -- --------------------------------------------------------
 
@@ -142,18 +145,18 @@ INSERT INTO `logement` (`id`, `rue`, `codePostal`, `ville`, `description`, `idPr
 
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `taille` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `taille` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `lien` varchar(300) NOT NULL,
-  `idEquipement` int DEFAULT NULL,
-  `idLogement` int DEFAULT NULL,
-  `idPiece` int DEFAULT NULL,
+  `idEquipement` int(11) DEFAULT NULL,
+  `idLogement` int(11) DEFAULT NULL,
+  `idPiece` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `Photo_Equipement_FK` (`idEquipement`),
   KEY `Photo_Logement0_FK` (`idLogement`),
   KEY `Photo_Piece1_FK` (`idPiece`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `photo`
@@ -164,7 +167,8 @@ INSERT INTO `photo` (`id`, `taille`, `type`, `lien`, `idEquipement`, `idLogement
 (2, 316, 'JPG', 'bde8779-78fdb7da89-adc1214db47-dacebf78.jpg', 0, 2, 0),
 (3, 412, 'JPG', 'ebcd4d3c-6a00-47d2-8165-6d9e192082af.jpg', 0, 3, 0),
 (4, 56, 'JPG', 'ebda4-affe587-5754-afbbc5-fed485a4dc.jpg', 0, 4, 0),
-(5, 52, 'JPG', 'ebebc456d3c-8add00-47d2-8765-67875fedbf.jpg', 0, 5, 0);
+(5, 52, 'JPG', 'ebebc456d3c-8add00-47d2-8765-67875fedbf.jpg', 0, 5, 0),
+(6, 68, 'JPG', 'aeb74e-bca7844ff52-7b41aed-fd6ea84b5-2.jpg', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -174,10 +178,10 @@ INSERT INTO `photo` (`id`, `taille`, `type`, `lien`, `idEquipement`, `idLogement
 
 DROP TABLE IF EXISTS `piece`;
 CREATE TABLE IF NOT EXISTS `piece` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `surface` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `surface` int(11) NOT NULL,
   `type` varchar(255) NOT NULL,
-  `idLogement` int NOT NULL,
+  `idLogement` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Piece_Logement_FK` (`idLogement`)
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
@@ -223,21 +227,21 @@ INSERT INTO `piece` (`id`, `surface`, `type`, `idLogement`) VALUES
 
 DROP TABLE IF EXISTS `reservation`;
 CREATE TABLE IF NOT EXISTS `reservation` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateDebut` date NOT NULL,
   `dateFin` date NOT NULL,
-  `idLogement` int NOT NULL,
-  `idClient` int NOT NULL,
+  `idDisponibilite` int(11) NOT NULL,
+  `idClient` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idLogement` (`idLogement`),
-  KEY `idClient` (`idClient`)
+  KEY `idClient` (`idClient`),
+  KEY `idDisponibilite` (`idDisponibilite`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `reservation`
 --
 
-INSERT INTO `reservation` (`id`, `dateDebut`, `dateFin`, `idLogement`, `idClient`) VALUES
+INSERT INTO `reservation` (`id`, `dateDebut`, `dateFin`, `idDisponibilite`, `idClient`) VALUES
 (1, '2023-12-01', '2023-12-07', 1, 3),
 (2, '2023-11-25', '2023-11-30', 2, 1),
 (3, '2024-01-12', '2024-01-18', 3, 4),
@@ -252,12 +256,11 @@ INSERT INTO `reservation` (`id`, `dateDebut`, `dateFin`, `idLogement`, `idClient
 
 DROP TABLE IF EXISTS `utilisateur`;
 CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `mdp` varchar(300) NOT NULL,
   `nom` varchar(150) NOT NULL,
   `prenom` varchar(150) NOT NULL,
   `mail` varchar(150) NOT NULL,
-  `proprietaire` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
@@ -265,12 +268,12 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`id`, `mdp`, `nom`, `prenom`, `mail`, `proprietaire`) VALUES
-(1, 'motdepasse1', 'Dupont', 'Pierre', 'pierre.dupont@gmail.com', 1),
-(2, 'motdepasse2', 'Varin', 'Nick', 'nick.varin@gmail.com', 1),
-(3, 'motdepasse3', 'Savea', 'Erwann', 'erwann.savea@gmail.com', 0),
-(4, 'motdepasse4', 'Martin', 'Sophie', 'sophie.martin@gmail.com', 0),
-(5, 'motdepasse5', 'Lefevre', 'Emma', 'emma.lefevre@gmail.com', 1);
+INSERT INTO `utilisateur` (`id`, `mdp`, `nom`, `prenom`, `mail`) VALUES
+(1, 'motdepasse1', 'Dupont', 'Pierre', 'pierre.dupont@gmail.com'),
+(2, 'motdepasse2', 'Varin', 'Mael', 'mael.varin@gmail.com'),
+(3, 'motdepasse3', 'Savea', 'Erwann', 'erwann.savea@gmail.com'),
+(4, 'motdepasse4', 'Martin', 'Sophie', 'sophie.martin@gmail.com'),
+(5, 'motdepasse5', 'Lefevre', 'Emma', 'emma.lefevre@gmail.com');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
