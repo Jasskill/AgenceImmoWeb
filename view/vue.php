@@ -338,9 +338,20 @@ class Vue {
         echo '
             <div class="col-md-12 mb-4">
                 <div class="card flex-row">
-                    <div class="card-body d-flex flex-column">
-                        <h4 class="card-title h5 h4-sm">' . $logement["description"] . '</h4>
-                        <p class="card-text">' . $logement["codePostal"] . " " . $logement["ville"] . '</p>
+                    <div class="card-body d-flex">
+                        <img class="card-img-left custom-image" src="./images/'.$logement["lien"].'" style="max-width: 30%;"/>
+                        <div class="flex-grow-1 ms-3">
+                            <h4 class="card-title h5 h4-sm">' . $logement["description"] . '</h4>
+                            <p class="card-text">' . $logement["codePostal"] . " " . $logement["ville"] . '</p>
+                        </div>
+                        <div class="mt-auto">
+                          <i>Gérer les disponibilités</i>
+                          <a class="float-end" href="index.php?action=#"><i class="fa-solid fa-arrow-right text-noir"></i></a>
+                        </div>
+                        <div class="mt-auto">
+                          <i>Gérer les réservations</i>
+                          <a class="float-end" href="index.php?action=mesLogementsLoue"><i class="fa-solid fa-arrow-right text-noir"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>';
@@ -349,6 +360,16 @@ class Vue {
     echo '</div></div></div>';
     $this->fin();
   }
+
+  public function mesLogementsLoue($lesReservations) {
+    $this->entete();
+    foreach ($lesReservations as $reservation) {
+
+
+    }
+  }
+
+
 
 
 

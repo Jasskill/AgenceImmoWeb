@@ -196,6 +196,17 @@ class Controleur {
         (new Vue)->erreur404();
         }
     }
+
+    public function mesLogementsLoue(){
+        if(isset($_SESSION['Proprietaire_session'])) {
+        $idProprietaire = $_SESSION['Proprietaire_session'];
+        var_dump($idProprietaire);
+        $lesReservations = (new Proprietaire)->mesLogementsLoue($idProprietaire); 
+        (new Vue)->mesLogementsLoue($lesReservations);
+        } else {
+        (new Vue)->erreur404();
+        }
+    }
 }
 
 ?>
