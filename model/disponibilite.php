@@ -20,6 +20,7 @@ class Disponibilite{
         $req->execute();
         return $req->fetchAll();
     }
+
     //Ajouter une disponibilite
     public function ajouterDisponibilite($dateDebut, $dateFin, $idLogement, $tarif, $valide, $derive){
         $sql = 'INSERT INTO disponibilite (dateDebut, dateFin, idLogement, tarif, valide, derive) VALUES (:dateDebut, :dateFin, :idLogement, :tarif, :valide, :derive)';

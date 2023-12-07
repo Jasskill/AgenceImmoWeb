@@ -17,6 +17,7 @@ require("view/vue.php");
 require("model/Utilisateur.php");
 require("model/annonce.php");
 require("model/reservation.php");
+require("model/proprietaire.php");
 
 //Routes
 if(isset($_GET["action"])) {
@@ -44,6 +45,9 @@ if(isset($_GET["action"])) {
             break;
         case "reservation":
             (new controleur)->reservation();
+            break;
+        case "mesLogements":
+            (new controleur)->mesLogements();
             break;
         case "logout":
             (new controleur)->logout();

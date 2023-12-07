@@ -1,5 +1,6 @@
 <?php
 class Vue {
+  // ENTETE // ENTETE // ENTETE // ENTETE
   public function entete() {
     echo '
         <!DOCTYPE html>
@@ -18,7 +19,7 @@ class Vue {
                   color: black; 
                 }
                 .btn-text-color {
-                  margin-top: 4%;
+                  margin-top: 10%;
                   background-color : transparent;
                   color: #7696c9;
                   border : none;
@@ -43,11 +44,11 @@ class Vue {
                     echo '
                     <div class="dropdown">
                       <button class="btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown button
+                        Gérer 
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">ICI JE SUIS PROPRIO</a></li>
-                        <li><a class="dropdown-item" href="index.php?action=reservation">Mes Logements</a></li>
+                        <li><a class="dropdown-item" href="#">Gérer mes réservations</a></li>
+                        <li><a class="dropdown-item" href="index.php?action=mesLogements">Mes Logements</a></li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
                     </div>';
@@ -55,10 +56,10 @@ class Vue {
                     echo '
                     <div class="dropdown">
                       <button class="btn btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown button
+                       Gérer
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">ICI JE SUIS IENCLI</a></li>
+                        <li><a class="dropdown-item" href="#">Mes Favoris</a></li>
                         <li><a class="dropdown-item" href="index.php?action=reservation">Mes Réservations</li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
@@ -80,7 +81,7 @@ class Vue {
           </nav>';
   }
   
-
+  // ACCUEIL UTILISATEUR AVEC LES ANNONCES 
   public function accueil($lesAnnonces, $message = null) {
     $this->entete();
     if($message != null) {
@@ -111,6 +112,8 @@ class Vue {
         echo '</div></div></div>';
         $this->fin();
     }
+
+    // RECHERCHE RECHERCHE RECHERCHE RECHERCHE RECHERCHE 
     public function recherche($lesRecherche){
       //$this->entete();
       echo var_dump($lesRecherche);
@@ -140,12 +143,13 @@ class Vue {
         }
         $this->fin();
     }
-  // Deconnexion utilisateur
+
+  // PERMET LA DECONNEXION DE L'UTILISATEUR
   public function deconnexion($message = null){
     $this->entete();
     session_destroy();
   }
-  //Affichage connexion utilisateur
+  // AFFICHAGE CONNEXION UTILISATEUR
   public function connexion($message = null) {
     if(!isset($_SESSION)) {
       session_start();
@@ -178,7 +182,7 @@ class Vue {
     $this->fin();
   }
 
-  //recherche
+  // RECHERCHE -> RECHERCHE  -> RECHERCHE
   public function recherchedeux() {
     $this->entete();
     echo '
@@ -192,7 +196,7 @@ class Vue {
   }
 
 
-  //Affichage inscription utilisateur
+  // PAGE INSCRIPTION -> PAGE INSCRIPTION  -> PAGE INSCRIPTION 
   public function inscription($message = null) {
     $this->entete();
     if($message != null) {
@@ -233,6 +237,7 @@ class Vue {
     ";
     $this->fin();
   }
+  // DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION 
   public function demandeReservation($annonce, $date1, $date2) {
     $this->entete();
 
@@ -245,7 +250,7 @@ class Vue {
                               <div class="card-body text-center">
                                   <h1> '.$annonce["description"].' </h1>
                                   <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
-                                  
+                                
                                   <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
                                   <h6> Disponible du '.$date1.' au '.$date2.'</h6>
                                   <form method="post" action="">
@@ -262,6 +267,8 @@ class Vue {
 
     $this->fin();
   }
+
+  // PAGE ANNONCE ACCESSIBLE VIA LA NAVBAR
   public function mesannonces($lesAnnonces) {
     $this->entete();
     echo '
@@ -317,6 +324,29 @@ class Vue {
   </div>
   </div>';
 
+    $this->fin();
+  }
+
+  // DROP DOWN BUTTON -> PROPRIETAIRES -> VOIR MES LOGEMENTS 
+  public function mesLogements($lesLogements){
+    $this->entete();
+    echo '<div class="container d-flex justify-content-center main-content">';
+    echo '<div class="container-fluid bg-transparent my-4 p-3">';
+    echo '<div class="row">';
+
+    foreach ($lesLogements as $logement) {
+        echo '
+            <div class="col-md-12 mb-4">
+                <div class="card flex-row">
+                    <div class="card-body d-flex flex-column">
+                        <h4 class="card-title h5 h4-sm">' . $logement["description"] . '</h4>
+                        <p class="card-text">' . $logement["codePostal"] . " " . $logement["ville"] . '</p>
+                    </div>
+                </div>
+            </div>';
+    }
+
+    echo '</div></div></div>';
     $this->fin();
   }
 

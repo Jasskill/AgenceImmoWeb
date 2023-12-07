@@ -186,6 +186,16 @@ class Controleur {
 
         return $stringDate;
     }
+
+    public function mesLogements(){
+        if(isset($_SESSION['Proprietaire_session'])) {
+        $idProprietaire = $_SESSION['Proprietaire_session'];
+        $lesLogements = (new Proprietaire)->lesLogements($idProprietaire);
+        (new Vue)->mesLogements($lesLogements);
+        } else {
+        (new Vue)->erreur404();
+        }
+    }
 }
 
 ?>

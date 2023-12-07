@@ -14,10 +14,10 @@ class Proprietaire {
     }
 
     //Récuperer tout les logements d'un propriétaire passer en paramètre
-    public function lesLogements($proprietaire){
+    public function lesLogements($idProprietaire){
         $sql ='SELECT * FROM logement WHERE idProprietaire = :id';
         $req = $this->pdo->prepare($sql);
-        $req->bindParam(':id',$proprietaire, PDO::PARAM_INT);
+        $req->bindParam(':id',$idProprietaire, PDO::PARAM_INT);
         $req->execute();
         return $req->fetchAll();
     }
