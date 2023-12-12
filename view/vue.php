@@ -240,31 +240,43 @@ class Vue {
   // DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION 
   public function demandeReservation($annonce, $date1, $date2) {
     $this->entete();
-
     echo '
-          <div class="container d-flex justify-content-center main-content">
-              <div class="container-fluid bg-transparent my-4 p-1" style="position: relative;">
-                  <div class="row">
-                      <div class="col-md-12 mb-4">
-                          <div class="card carte">
-                              <div class="card-body text-center">
-                                  <h1> '.$annonce["description"].' </h1>
-                                  <h3>'.$annonce["codePostal"].' - <b><i>'.$annonce["ville"].'</b></i></h3>
-                                
-                                  <img class="card-img" src="./images/'.$annonce["lesPhotos"][0]["lien"].'">
-                                  <h6> Disponible du '.$date1.' au '.$date2.'</h6>
-                                  <form method="post" action="">
-                                      <p> Date de début de réservation : <input type="date" name="dateDebut" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
-                                      <p> Date de fin de réservation : <input type="date" name="dateFin" value="" min="'.$annonce["lesDisponibilites"]["dateDebut"].'" max="'.$annonce["lesDisponibilites"]["dateFin"].'" required></p>
-                                      <input type="submit" name="valider" value="ok">
-                                  </form>
-                              </div>
+    <div class="container d-flex justify-content-center main-content">
+        <div class="container-fluid bg-transparent my-4 p-1" style="position:relative;">
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="card carte">
+                        <div class="card-body">
+                          <div class="text-center">
+                            <h1>' . $annonce["description"] . '</h1>
+                            <h3>' . $annonce["codePostal"] . ' - <b><i>' . $annonce["ville"] . '</b></i></h3>
+                            <img class="custom-imgreservation" src="./images/' . $annonce["lesPhotos"][0]["lien"] . '">
                           </div>
-                      </div>
-                  </div>
-              </div>
-          </div>';
-
+                            <div class="row">
+                                <div class="col-md-4">
+                                  </br>
+                                    <h6>première colonne</h6>
+                                </div>
+                                <div class="col-md-4">
+                                  </br>
+                                    <h6>deuxième colonne</h6>
+                                </div>
+                                <div class="col-md-4">
+                                  </br>
+                                  <h4>Réservation : </h4>
+                                    <form method="post" action="">
+                                        <p> Date de début de réservation : <input type="date" name="dateDebut" value="" min="' . $annonce["lesDisponibilites"]["dateDebut"] . '" max="' . $annonce["lesDisponibilites"]["dateFin"] . '" required></p>
+                                        <p> Date de fin de réservation : <input type="date" name="dateFin" value="" min="' . $annonce["lesDisponibilites"]["dateDebut"] . '" max="' . $annonce["lesDisponibilites"]["dateFin"] . '" required></p>
+                                        <input type="submit" class="btn btn-secondary" name="valider" value="Réserver">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>';
     $this->fin();
   }
 
@@ -370,22 +382,18 @@ class Vue {
   }
 
 
-
-
-
-
-
-
   public function erreur404() {
     http_response_code(404);
     $this->entete();
-
     echo "
-      <h1>Erreur 404 : page introuvable !</h1>
-      <br/>
-      <p>
-        Cette page n'existe pas ou a été supprimée !
-      </p>
+      <div class='main-content d-flex align-items-center justify-content-center'>
+        <div class='text-center'>
+          <h1 class='display-1 fw-bold'>404</h1>
+          <p class='fs-1'> <span class='text-danger'>Opps!</span> Page introuvable.</p>
+          <p class='lead'>La page que vous cherchez n'éxiste pas.</p>
+          <a href='index.html' class='btn btn-secondary'>Go Home</a>
+        </div>
+      </div>
     ";
 
     $this->fin();

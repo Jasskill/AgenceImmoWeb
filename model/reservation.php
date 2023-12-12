@@ -29,4 +29,20 @@ class reservation
             return $erreur;
         }
     }
+    //Calculer tarif
+    public function calculTarif($idReservation){
+        $sql = "SELECT DATEDIFF(reservation.dateFin, reservation.dateDebut as nbjours, disponibilite.tarif
+                FROM reservation
+                INNER JOIN disponibilite ON reservation.idDisponibilite = disponibilite.id
+                WHERE reservation.id = :idReservation
+        ";
+        $req = $this->pdo->prepare($sql);
+        $req->bindParam(':idReservation', $idReservation, PDO::PARAM_INT);
+        $req->execute();
+        $resultat = $req->fetch();
+        $duree = $resultat['duree'];
+        $tarifjour = $resultat['tarif'];
+        $total = $duree * $tarifjour;
+        return $total;
+    }
 }
