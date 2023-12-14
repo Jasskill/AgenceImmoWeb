@@ -53,13 +53,14 @@ class Utilisateur {
     }
     //Inscrire un utilisateur
     public function inscription($mdp, $nom, $prenom, $mail){
-        $sql ="INSERT INTO Utilisateur (`mdp`, `nom`,`prenom`,`mail`) VALUES (:mdp, :nom, :prenom, :mail)";
+        $sql ="INSERT INTO Utilisateur (mdp, nom, prenom, mail, proprietaire) VALUES (:mdp, :nom, :prenom, :mail, 0)";
         $req = $this->pdo->prepare($sql);
         $req->bindParam(":mdp",$mdp, PDO::PARAM_STR);
         $req->bindParam(":nom",$nom, PDO::PARAM_STR);
         $req->bindParam(":prenom", $prenom, PDO::PARAM_STR);
         $req->bindParam(":mail", $mail, PDO::PARAM_STR);
-        $req->execute();
+        $res = $req->execute();
+        return $res;
     }
     //Récuperer les infos de l'utilisateur
     public function infosUtilisateur($utilisateur){

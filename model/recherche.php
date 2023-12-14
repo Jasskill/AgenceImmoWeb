@@ -20,7 +20,7 @@ Class rechercher{
             $recherche = htmlspecialchars($_GET["barRecherche"]);
             $champ = $_GET["barRecherche"];
             $champ = trim($champ);
-            $champ = strip_tags($champ;)
+            $champ = strip_tags($champ);
 
             $requete = "SELECT * FROM logement 
             inner join disponibilite on logement.id = disponibilite.idLogement 
@@ -37,5 +37,5 @@ Class rechercher{
         }
 
     }
-
+}
 ?>

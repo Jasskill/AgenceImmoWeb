@@ -57,6 +57,9 @@ if(isset($_GET["action"])) {
         case "annonce":
             (new controleur)->boutonannonce();
             break;
+        case "annulerReservation":
+            (new Controleur)->annulerReservation();
+            break;
         default:
             //route par default : erreur404
             (new controleur)->erreur404();

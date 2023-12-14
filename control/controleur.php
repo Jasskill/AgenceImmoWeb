@@ -1,9 +1,11 @@
 <?php
 
-class Controleur {
+class Controleur
+{
     private $vue;
 
-    public function __construct() {
+    public function __construct()
+    {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -11,40 +13,46 @@ class Controleur {
         $this->vue = new Vue();
     }
 
-    public function accueil($message = null) {
+    public function accueil($message = null)
+    {
         $lesAnnonces = (new annonce)->recupererAnnonces(0, 5);
-        $lesRecherche = (new annonce)->recupAnnonceRecherche(0,5);
+        $lesRecherche = (new annonce)->recupAnnonceRecherche(0, 5);
         (new vue)->accueil($lesAnnonces, $message);
     }
-    public function recherche(){
+    public function recherche()
+    {
         $lesRecherche = (new annonce)->recupAnnonceRecherche();
         (new vue)->recherche($lesRecherche);
     }
 
-    public function erreur404() {
+    public function erreur404()
+    {
         (new vue)->erreur404();
     }
 
-    public function erreur() {
+    public function erreur()
+    {
         (new vue)->erreur();
     }
 
     // Contrôleur Annonce
-    public function boutonannonce(){
+    public function boutonannonce()
+    {
         $lesAnnonces = (new Annonce)->recupererAnnonces();
         (new vue)->mesannonces($lesAnnonces);
-        
-      }
+
+    }
     // Contrôleur Connexion
-    public function connexion($message = null) {
+    public function connexion($message = null)
+    {
         if (isset($_POST['buttonconnect'])) {
             $mail = htmlspecialchars($_POST['mail']);
             $mdp = htmlspecialchars($_POST['mdp']);
-            
+
             $utilisateur = new Utilisateur();
-            
+
             if ($utilisateur->connexion($mail, $mdp)) {
-				$_SESSION['estconnecte'] = true;
+                $_SESSION['estconnecte'] = true;
                 $this->accueil();
                 $message = 'Connexion réussie!';
             } else {
@@ -56,24 +64,30 @@ class Controleur {
     }
 
     // Contrôleur Inscription
-    public function inscription() {
+    public function inscription()
+    {
         if (isset($_POST["buttonregister"])) {
             $mdp = htmlspecialchars($_POST['mdp']);
             $mdp2 = htmlspecialchars($_POST['mdp2']);
-            
+
             if ($mdp == $mdp2) {
                 $nom = htmlspecialchars($_POST['nom']);
                 $prenom = htmlspecialchars($_POST['prenom']);
                 $mail = htmlspecialchars($_POST['mail']);
                 $mdpHash = password_hash($mdp, PASSWORD_BCRYPT);
-                
+
                 $utilisateur = new Utilisateur();
-                
+
                 if (!$utilisateur->dejaInscrit($mail)) {
-                    $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
-                    (new vue)->connexion();
-                    $message = 'Inscription réussie !';
-                    echo "<script type='text/javascript'>window.alert('" . $message . "');</script>";
+                    $res = $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
+                    if ($res) {
+                        (new vue)->connexion();
+                        $message = 'Inscription réussie !';
+                        echo "<script type='text/javascript'>window.alert('" . $message . "');</script>";
+                    } else {
+                        (new vue)->erreur("L'inscription a échoué, veuillez réessayer plus tard");
+                    }
+
                 } else {
                     (new vue)->inscription("Le mail est déjà associé à un autre compte !");
                 }
@@ -84,127 +98,141 @@ class Controleur {
             (new vue)->inscription();
         }
     }
-    public function logout(){
+    public function logout()
+    {
         session_destroy();
     }
 
-    public function demandeReservation(){
+    public function demandeReservation()
+    {
 
-        if(isset($_GET["id"])){
-            if(isset($_POST["valider"])){
-                if(isset($_SESSION["connect"])){
+        if (isset($_GET["id"])) {
+            if (isset($_POST["valider"])) {
+                if (isset($_SESSION["connect"])) {
                     $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
                     $dateDebut = htmlspecialchars($_POST["dateDebut"]);
                     $dateFin = htmlspecialchars($_POST["dateFin"]);
                     $idD = htmlspecialchars($_GET["id"]);
                     (new annonce)->creerReservation($dateDebut, $dateFin, $idD, $_SESSION["connect"]);
-                    if($annonce["lesDisponibilites"]["dateDebut"] != $dateDebut){
+                    if ($annonce["lesDisponibilites"]["dateDebut"] != $dateDebut) {
                         (new annonce)->creerDisponibilite($annonce["lesDisponibilites"]["dateDebut"], $dateDebut, $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
-                    if($dateFin != $annonce["lesDisponibilites"]["dateFin"]){
+                    if ($dateFin != $annonce["lesDisponibilites"]["dateFin"]) {
                         (new annonce)->creerDisponibilite($dateFin, $annonce["lesDisponibilites"]["dateFin"], $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
                     header("Location: index.php?action=accueil");
                     exit;
-                }else{
+                } else {
                     $this->connexion("Veuiller vous connecter");
                 }
-            }else{
+            } else {
                 $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
                 $dateDebut = $this->recupereDate($annonce["lesDisponibilites"]["dateDebut"]);
                 $dateFin = $this->recupereDate($annonce["lesDisponibilites"]["dateFin"]);
                 (new vue)->demandeReservation($annonce, $dateDebut, $dateFin);
             }
-        }else{
+        } else {
             $this->erreur404();
         }
     }
 
-    public function reservation(){
-        if(isset($_SESSION["connect"])){
-            $lesReservations = (new reservation)->recupererReservations($_SESSION["connect"]);
-            if($lesReservations["code"]){
-                (new vue)->reservation($lesReservations);    
-            }else{
+    public function reservation()
+    {
+        if (isset($_SESSION["Client_session"])) {
+            $lesReservations = (new reservation)->recupererReservations($_SESSION["Client_session"]);
+            if ($lesReservations != false) {
+                (new vue)->reservation($lesReservations);
+            } else {
                 (new vue)->erreur("Impossible de récupérer les réservations");
             }
-        }else{
+        } else {
             $this->erreur404();
         }
     }
 
-    public function recupereDate($date){
+    public function annulerReservation(){
+        if(isset($_GET["id"])){
+            (new reservation)->annulerReservation($_GET["id"]);
+        }else{
+            (new vue)->erreur404();
+        }
+    }
+
+    public function recupereDate($date)
+    {
         $dateTab = explode("-", $date);
         $stringDate = "";
-        if($dateTab[2] == "1"){
+        if ($dateTab[2] == "1") {
             $stringDate = "1er ";
-        }else{
-            $stringDate = $dateTab[2]." ";
+        } else {
+            $stringDate = $dateTab[2] . " ";
         }
-        switch($dateTab[1]){
+        switch ($dateTab[1]) {
             case "01":
-                $stringDate.= "janvier ";
+                $stringDate .= "janvier ";
                 break;
             case "02":
-                $stringDate.= "février ";
+                $stringDate .= "février ";
                 break;
             case "03":
-                $stringDate.= "mars ";
+                $stringDate .= "mars ";
                 break;
             case "04":
-                $stringDate.= "avril ";
+                $stringDate .= "avril ";
                 break;
             case "05":
-                $stringDate.= "mai ";
+                $stringDate .= "mai ";
                 break;
             case "06":
-                $stringDate.= "juin ";
+                $stringDate .= "juin ";
                 break;
             case "07":
-                $stringDate.= "juillet ";
+                $stringDate .= "juillet ";
                 break;
             case "08":
-                $stringDate.= "août ";
+                $stringDate .= "août ";
                 break;
             case "09":
-                $stringDate.= "septembre ";
+                $stringDate .= "septembre ";
                 break;
             case "10":
-                $stringDate.= "octobre ";
+                $stringDate .= "octobre ";
                 break;
             case "11":
-                $stringDate.= "novembre ";
+                $stringDate .= "novembre ";
                 break;
             case "12":
-                $stringDate.= "décembre ";
+                $stringDate .= "décembre ";
                 break;
             default:
-                $stringDate.= $dateTab[1];
+                $stringDate .= $dateTab[1];
                 break;
         }
-        $stringDate.= $dateTab[0];
+        $stringDate .= $dateTab[0];
 
         return $stringDate;
     }
 
-    public function mesLogements(){
-        if(isset($_SESSION['Proprietaire_session'])) {
-        $idProprietaire = $_SESSION['Proprietaire_session'];
-        $lesLogements = (new Proprietaire)->lesLogements($idProprietaire);
-        (new Vue)->mesLogements($lesLogements);
+    public function mesLogements()
+    {
+        if (isset($_SESSION['Proprietaire_session'])) {
+            $idProprietaire = $_SESSION['Proprietaire_session'];
+            $lesLogements = (new Proprietaire)->lesLogements($idProprietaire);
+            (new Vue)->mesLogements($lesLogements);
         } else {
-        (new Vue)->erreur404();
+            (new Vue)->erreur404();
         }
     }
 
-    public function mesLogementsLoue(){
-        if(isset($_SESSION['Proprietaire_session'])) {
-        $idProprietaire = $_SESSION['Proprietaire_session'];
-        var_dump($idProprietaire);
-        $lesReservations = (new Proprietaire)->mesLogementsLoue($idProprietaire); 
-        (new Vue)->mesLogementsLoue($lesReservations);
+    public function mesLogementsLoue()
+    {
+        if (isset($_SESSION['Proprietaire_session'])) {
+            $idProprietaire = $_SESSION['Proprietaire_session'];
+            var_dump($idProprietaire);
+            $lesReservations = (new Proprietaire)->mesLogementsLoue($idProprietaire);
+            (new Vue)->mesLogementsLoue($lesReservations);
         } else {
-        (new Vue)->erreur404();
+            (new Vue)->erreur404();
         }
     }
 }

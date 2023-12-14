@@ -321,16 +321,23 @@ class Vue {
   <div class="container d-flex justify-content-center main-content">
   <div class="container-fluid bg-transparent my-4 p-3">
       <div class="row">';
-    foreach($lesReservations as $reservation) {
-      echo '
-            <div class="col-md-12 mb-4">
-              <div class="card flex-row">
-                <div class="card-body d-flex flex-column">
-                  '.$reservation["dateDebut"].'
-                </div>
-              </div>
-            </div>';
-    }
+      foreach($lesReservations as $reservation) {
+        echo '
+                          <div class="col-md-4 mb-4">
+                            <div class="card carte h-100">
+                              <div class="card-body">
+                                <h5 class="card-text">'.$reservation["description"].'</h5>
+                                <h6 class="card-text">'.$reservation["codePostal"]." ".$reservation["ville"].'</h6>
+                                <img class="card-img img-fluid" src="./images/'.$reservation["lienPhoto"].'">
+                              </div>
+                              <div class="mx-3 mb-3">
+                                <a class="float-end" href="index.php?action=annulerReservation&id='.$reservation["id"].'">
+                                  <i class="fa-solid  text-danger">Annuler la Reservation</i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>';
+          }
     echo '
         </div>
   </div>
