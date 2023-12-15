@@ -118,27 +118,38 @@ class Vue {
       $this->entete();
       echo '
       <div class="container d-flex justify-content-center main-content">
-      <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
-        <div class="row">
+        <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
+          <div class="row">
         <form method="POST" class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
-          <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
+          <button class="btn btn-secondary" type="submit" name="btnRecherche">Rechercher</button>
         </form>
         ';
-      foreach ($lesRecherche as $recherche) {
-        echo '
-          <div class="col-md-4 mb-4">
-            <div class="card carte">
-                <div class="card-body">
-                  <h5 class="card-text">' . $recherche["description"] . '</h5>
-                  <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
-                  <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">
+      if (isset($lesRecherche) && is_array($lesRecherche)) {
+        foreach ($lesRecherche as $recherche) {
+          echo '
+            <div class="col-md-4 mb-4">
+              <div class="card carte">
+                  <div class="card-body">
+                    <h5 class="card-text">' . $recherche["description"] . '</h5>
+                    <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
+                    <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">
+                  </div>
+                  <li class="list-group-item">Réference : ' . $recherche["id"] . '</li>
+                  <a class="nav-link" href="index.php?action=demandeReservation&id='.$recherche ["id"].'">Voir l\'offre</a>
                 </div>
-                <li class="list-group-item">Réference : ' . $recherche["id"] . '</li>
-                <a class="nav-link" href="index.php?action=demandeReservation&id='.$recherche ["id"].'">Voir l\'offre</a>
               </div>
-            </div>
-          ';
+            ';
+          }
+        }else{
+          echo "
+          <div class='main-content d-flex align-items-center justify-content-center'>
+          <div class='text-center'>
+            </br>
+            <p class='fs-1'>Essayez une nouvelle recherche ! </p>
+            <a href='index.php' class='btn btn-secondary'>Allez à l'accueil !</a>
+          </div>
+        </div>";
         }
         $this->fin();
     }
@@ -397,7 +408,7 @@ class Vue {
           <h1 class='display-1 fw-bold'>404</h1>
           <p class='fs-1'> <span class='text-danger'>Opps!</span> Page introuvable.</p>
           <p class='lead'>La page que vous cherchez n'éxiste pas.</p>
-          <a href='index.html' class='btn btn-secondary'>Go Home</a>
+          <a href='index.php' class='btn btn-secondary'>Allez à l'accueil !</a>
         </div>
       </div>
     ";
