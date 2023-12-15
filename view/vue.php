@@ -121,24 +121,23 @@ class Vue {
       <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
         <div class="row">
         <form method="POST" class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
-                    <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
-                  </form>
+          <input class="form-control me-2" type="search" placeholder="Entrer un mot clé" aria-label="Search" name="barRecherche">
+          <button class="btn btn-outline-success" type="submit" name="btnRecherche">Rechercher</button>
+        </form>
         ';
-          foreach ($lesRecherche as $recherche) {
-              echo '
-              <div class="col-md-4 mb-4">
-                <div class="card carte">
-                  <div class="card-body">
-                    <h5 class="card-text">' . $recherche["description"] . '</h5>
-                    <h5 class="card-text">' . $recherche["description"] . '</h5>
-                    <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
-                    <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">
-                  </div>
-                  <li class="list-group-item">Réference : ' . $recherche["id"] . '</li>
-                  <a class="nav-link" href="index.php?action=demandeReservation&id='.$recherche ["id"].'">Voir l\'offre</a>
+      foreach ($lesRecherche as $recherche) {
+        echo '
+          <div class="col-md-4 mb-4">
+            <div class="card carte">
+                <div class="card-body">
+                  <h5 class="card-text">' . $recherche["description"] . '</h5>
+                  <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
+                  <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">
                 </div>
+                <li class="list-group-item">Réference : ' . $recherche["id"] . '</li>
+                <a class="nav-link" href="index.php?action=demandeReservation&id='.$recherche ["id"].'">Voir l\'offre</a>
               </div>
+            </div>
           ';
         }
         $this->fin();
