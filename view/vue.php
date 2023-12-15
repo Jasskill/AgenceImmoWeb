@@ -115,8 +115,7 @@ class Vue {
 
     // RECHERCHE RECHERCHE RECHERCHE RECHERCHE RECHERCHE 
     public function recherche($lesRecherche){
-      //$this->entete();
-      echo var_dump($lesRecherche);
+      $this->entete();
       echo '
       <div class="container d-flex justify-content-center main-content">
       <div class="container-fluid bg-transparent my-4 p-3" style="position: relative;">
@@ -131,6 +130,7 @@ class Vue {
               <div class="col-md-4 mb-4">
                 <div class="card carte">
                   <div class="card-body">
+                    <h5 class="card-text">' . $recherche["description"] . '</h5>
                     <h5 class="card-text">' . $recherche["description"] . '</h5>
                     <h6 class="card-text">'.$recherche["codePostal"]." ".$recherche["ville"]. '</h6>
                     <img class="card-img" src="./images/'.$recherche["lienPhoto"].'">

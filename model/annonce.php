@@ -112,7 +112,7 @@ class annonce
         return $req->execute();
     }
 
-    public function recupAnnonceRecherche(){
+    public function recupAnnonceRecherchedeux(){
 
         if(isset($_POST["btnRecherche"]) && !empty($_POST["barRecherche"])){
             $recherche = htmlspecialchars($_POST["barRecherche"]);

@@ -18,6 +18,8 @@ require("model/Utilisateur.php");
 require("model/annonce.php");
 require("model/reservation.php");
 require("model/proprietaire.php");
+require("model/recherche.php");
+
 
 //Routes
 if(isset($_GET["action"])) {

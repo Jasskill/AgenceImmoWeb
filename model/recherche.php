@@ -22,18 +22,19 @@ Class rechercher{
             $champ = trim($champ);
             $champ = strip_tags($champ);
 
-            $requete = "SELECT * FROM logement 
+            $requete = $this->pdo->prepare("SELECT logement.*, photo.lien AS lienPhoto  FROM logement 
             inner join disponibilite on logement.id = disponibilite.idLogement 
             inner join equipement on logement.id = equipement.idLogement 
-            inner join photo on logement.id = photo.idLogementn 
+            inner join photo on logement.id = photo.idLogement 
             inner join piece on logement.id = piece.idLogement 
             inner join reservation on logement.id = reservation.idLogement 
-            WHERE description LIKE ? OR ville LIKE ? or libelle like ? or type like ?";
-            echo $requete;
-            $requete->execute(array("%".$champ."%", "%".$champ."%", "%".$champ."%", "%".$champ."%"));
-            $lesRecherche = $requete->fetchAll();
-
-            return $lesRecherche;
+            WHERE description LIKE :champ OR ville LIKE :champ_ville or libelle like :champ_libelle or type like :champ_type");
+            $requete->bindParam(":champ", $champ, \PDO::PARAM_STR);
+            $requete->bindParam(":champ_ville", $champ, \PDO::PARAM_STR);
+            $requete->bindParam(":champ_libelle", $champ, \PDO::PARAM_STR);
+            $requete->bindParam(":champ_type", $champ, \PDO::PARAM_STR);
+            $requete -> execute(array(':champ' => "%".$champ."%",':champ_ville' => "%".$champ."%",':champ_libelle' => "%".$champ."%",':champ_type' => "%".$champ."%"));
+            return $requete->fetchAll();
         }
 
     }
