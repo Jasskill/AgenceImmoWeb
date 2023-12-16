@@ -397,7 +397,7 @@ class Vue {
                         </div>
                         <div class="mt-auto">
                           <i>Gérer les réservations</i>
-                          <a class="float-end" href="index.php?action=mesLogementsLoue"><i class="fa-solid fa-arrow-right text-noir"></i></a>
+                          <a class="float-end" href="index.php?action=GestionsReservationIdLogement&idLogement='.$logement["id"].'"><i class="fa-solid fa-arrow-right text-noir"></i></a>
                         </div>
                     </div>
                 </div>
@@ -450,15 +450,44 @@ class Vue {
         </div>';
       $this->fin();
   }
-  
-
-  public function mesLogementsLoue($lesReservations) {
+  public function GestionsReservationIdLogement($lesReservations){
     $this->entete();
-    foreach ($lesReservations as $reservation) {
-      
-
-    }
+    echo '
+        <div class="container d-flex justify-content-center main-content">
+          <div class="container-fluid bg-transparent my-4 p-3">
+            <div class="row">';
+              if (!empty($lesReservations)){
+                foreach($lesReservations as $reservationlogement){
+                  echo '
+                  <div class ="col-md-12 mb-4">
+                    <div class="card flex-rox">
+                      <div class="card-body d-flex flex-column">
+                        <div>
+                          <h4 class="card-title h5 h4-sm">Réservation N°'.$reservationlogement["id"].'</h4>
+                          <p>Date de début : '.$reservationlogement["dateDebut"].'<p>
+                          <p>Date de fin : '.$reservationlogement["dateFin"].'<p>
+                          <p>Client : ' .$reservationlogement["clientNom"].' '.$reservationlogement["clientPrenom"].'<p>
+                          <p>Logement : '.$reservationlogement["logementDescription"].'<p>
+                        </div>
+                        <div class"mt auto">
+                          <a class="float-end" href="index.php?action=#&id='.$reservationlogement["id"].'">
+                            Annuler la réservation
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  ';
+                }
+              }else{
+                echo '<p> aucune données </p>';
+              }
+      echo '</div>
+          </div>
+        </div>';
+        $this->fin();
   }
+
 
 
   public function erreur404() {

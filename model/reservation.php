@@ -13,7 +13,7 @@ class reservation
             echo $e->getMessage();
         }
     }
-
+// Récupérer les réservations en passant un id client en paramètre
     public function recupererReservations($idClient){
         $sql = "SELECT reservation.id AS id, rue, codePostal, ville, description, idProprietaire, tarif, 
                         COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal,reservation.dateDebut, reservation.dateFin, Photo.lien AS lienPhoto,
@@ -36,7 +36,7 @@ class reservation
             return false;
         }
     }
-
+// Permet d'annuler pour le client 
     public function annulerReservation($id){
         $sql = "SELECT disponibilite.id AS ID 
                 FROM reservation

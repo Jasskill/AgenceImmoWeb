@@ -25,15 +25,23 @@ class Proprietaire {
         return $req->fetchAll();
     }
     //Récuperer toute les réservations qu'a le logement d'un proprietaire
-    public function mesLogementsLoue($idProprietaire){
-        $sql = 'SELECT reservation.*, utilisateur.nom AS clientNom,
+    public function mesLogementsLoue($idProprietaire, $idLogement){
+        $sql = 'SELECT reservation.*, 
+        utilisateur.nom AS clientNom,
         utilisateur.prenom AS clientPrenom,
         logement.description AS logementDescription,
-        photo.lien AS logementPhoto
+        photo.lien AS lienPhoto
         FROM reservation
-        INNER JOIN disponibilite ON reservation.idDisponibilite ';
-
-            
+        INNER JOIN disponibilite ON reservation.idDisponibilite = disponibilite.id
+        INNER JOIN logement ON disponibilite.idLogement = logement.id
+        INNER JOIN utilisateur ON reservation.idClient = utilisateur.id
+        INNER JOIN photo ON logement.id = photo.id
+        WHERE logement.idProprietaire = :idProprietaire AND logement.id = :idLogement';
+        $req = $this->pdo->prepare($sql);
+        $req->bindParam(':idProprietaire',$idProprietaire, PDO::PARAM_INT);
+        $req->bindParam(":idLogement", $idLogement, \PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
