@@ -290,6 +290,22 @@ class Vue {
     $this->fin();
   }
 
+  public function succesReservation(){
+      $this->entete();
+
+      echo '
+      <div class="container d-flex justify-content-center main-content">
+          <div class="container-fluid bg-transparent my-4 p-1" style="position:relative;">
+              <div class="row">
+              <h1> Reservation Effectué !</h1>
+              <a class="a" href="index.php?action=accueil">Accueil</a>
+              </div>
+          </div>
+      </div>';
+
+      $this->fin();
+  }
+
   // PAGE ANNONCE ACCESSIBLE VIA LA NAVBAR
   public function mesannonces($lesAnnonces) {
     $this->entete();

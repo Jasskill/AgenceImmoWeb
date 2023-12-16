@@ -107,19 +107,19 @@ class Controleur
 
         if (isset($_GET["id"])) {
             if (isset($_POST["valider"])) {
-                if (isset($_SESSION["connect"])) {
+                if (isset($_SESSION["Client_session"])) {
                     $annonce = (new annonce)->recupererUneAnnonce($_GET["id"]);
                     $dateDebut = htmlspecialchars($_POST["dateDebut"]);
                     $dateFin = htmlspecialchars($_POST["dateFin"]);
                     $idD = htmlspecialchars($_GET["id"]);
-                    (new annonce)->creerReservation($dateDebut, $dateFin, $idD, $_SESSION["connect"]);
+                    (new annonce)->creerReservation($dateDebut, $dateFin, $idD, $_SESSION["Client_session"]);
                     if ($annonce["lesDisponibilites"]["dateDebut"] != $dateDebut) {
                         (new annonce)->creerDisponibilite($annonce["lesDisponibilites"]["dateDebut"], $dateDebut, $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
                     if ($dateFin != $annonce["lesDisponibilites"]["dateFin"]) {
                         (new annonce)->creerDisponibilite($dateFin, $annonce["lesDisponibilites"]["dateFin"], $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
-                    header("Location: index.php?action=accueil");
+                    header("Location: index.php?action=succesReservation");
                     exit;
                 } else {
                     $this->connexion("Veuiller vous connecter");
@@ -155,6 +155,10 @@ class Controleur
         }else{
             (new vue)->erreur404();
         }
+    }
+
+    public function succesReservation(){
+        (new vue)->succesReservation();
     }
 
     public function recupereDate($date)
