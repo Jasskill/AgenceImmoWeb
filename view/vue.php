@@ -55,12 +55,12 @@ class Vue {
                   } elseif(isset($_SESSION['Client_session'])){
                     echo '
                     <div class="dropdown">
-                      <button class="btn btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                       Gérer
+                      <button class="btn-text-color dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Gérer 
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Mes Favoris</a></li>
-                        <li><a class="dropdown-item" href="index.php?action=reservation">Mes Réservations</li>
+                        <li><a class="dropdown-item" href="#">Gérer mes réservations</a></li>
+                        <li><a class="dropdown-item" href="index.php?action=mesReservationsClient">Mes Réservations</a></li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
                     </div>';
@@ -182,7 +182,7 @@ class Vue {
             <input type='password' name='mdp' class='form-control' id='motdepasse' placeholder='●●●●●●●' required>
           </div>
           <br/>
-          <a href='index.php?action=inscription'> Vous n'êtes pas encore inscrit? Inscrivez-vous ! </a>
+          <a class='a' href='index.php?action=inscription'> Vous n'êtes pas encore inscrit? Inscrivez-vous ! </a>
           <br/>
           <br/>
           <button type='submit' class='btn btn-secondary' name='buttonconnect'>Connexion</button>
@@ -238,7 +238,7 @@ class Vue {
             <input type='password' name='mdp2' class='form-control' id='mdp2' placeholder='●●●●●●' required>
           </div>
           <br/>
-          <a href='index.php?action=connexion'>Vous êtes déjà client ? Connectez-vous !</a>
+          <a class='a' href='index.php?action=connexion'>Vous êtes déjà client ? Connectez-vous !</a>
           <br/>
           <br/>
           <button type'submit' class='btn btn-secondary' name='buttonregister'>Inscription</button>
@@ -324,6 +324,8 @@ class Vue {
     $this->fin();
   }
 
+
+  
   public function reservation($lesReservations) {
     $this->entete();
 
@@ -389,11 +391,55 @@ class Vue {
     echo '</div></div></div>';
     $this->fin();
   }
+  // VUE MES RESERVATIONS COTE CLIENTS 
+  public function mesReservationsClient($lesReservations)
+  {
+      $this->entete();
+      echo '
+        <div class="container d-flex justify-content-center main-content">
+          <div class="container-fluid bg-transparent my-4 p-3">
+            <div class="row">';
+            if (empty($lesReservations)) {
+              echo '<p>0</p>';
+            } else {
+              foreach ($lesReservations as $reservationclient) {
+                echo '
+                <div class="col-md-12 mb-4">
+                  <div class="card flex-row">
+                    <img class="card-img-left custom-image" src="./images/'.$reservationclient["lienPhoto"].'" style="max-width: 30%;"/>
+                    <div class="card-body d-flex flex-column">
+                      <div id="ici">
+                        <h4 class="card-title h5 h4-sm">'.$reservationclient["description"] . '</h4>
+                        <p class="card-text">'.$reservationclient["codePostal"].' '.$reservationclient["ville"] . '</p>
+                        <p>Nombre de pièces : '.$reservationclient["nbPieces"].'</p>
+                        <p>Surface totale : '.$reservationclient["surfaceTotal"].'</p>
+                        <p>Date de début du séjour : '.$reservationclient["dateDebut"].' au '.$reservationclient["dateFin"].'</p>
+                        <p>total : '.$reservationclient["Total"].'</p>
+                        <p>tarif: '.$reservationclient["tarif"].'</p>
+                      </div>
+                      <div class="mt-auto">
+                        <i>Référence :'.$reservationclient["id"].'</i>
+                        <a class="float-end" href="index.php?action=annulerReservation&id='.$reservationclient["id"] . '">
+                          <i class="fa-solid fa-arrow-right text-noir"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>';
+              }
+            }
+            echo '
+            </div>
+          </div>
+        </div>';
+      $this->fin();
+  }
+  
 
   public function mesLogementsLoue($lesReservations) {
     $this->entete();
     foreach ($lesReservations as $reservation) {
-
+      
 
     }
   }

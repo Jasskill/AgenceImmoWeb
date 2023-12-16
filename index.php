@@ -51,6 +51,9 @@ if(isset($_GET["action"])) {
         case "mesLogements":
             (new controleur)->mesLogements();
             break;
+        case "mesReservationsClient":
+            (new Controleur)->mesReservationsClient();
+            break;
         case "logout":
             (new controleur)->logout();
             (new controleur)->accueil();

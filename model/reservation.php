@@ -15,8 +15,9 @@ class reservation
     }
 
     public function recupererReservations($idClient){
-        $sql = "SELECT reservation.id AS id, rue, codePostal, ville, description, idProprietaire, 
-                        COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, Photo.lien AS lienPhoto, reservation.dateDebut
+        $sql = "SELECT reservation.id AS id, rue, codePostal, ville, description, idProprietaire, tarif, 
+                        COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal,reservation.dateDebut, reservation.dateFin, Photo.lien AS lienPhoto,
+                        SUM(DATEDIFF(reservation.dateFin, reservation.dateDebut) * disponibilite.tarif) as Total
                 FROM reservation 
                 INNER JOIN disponibilite ON reservation.idDisponibilite = disponibilite.id 
                 INNER JOIN logement ON Logement.id = disponibilite.idLogement 
@@ -49,8 +50,6 @@ class reservation
         }else{
             return false;
         }
-        
-
         $sql = "DELETE FROM disponibilite WHERE derive = :unIdDisponibilite; 
                 UPDATE disponibilite SET valide = 1 WHERE id = :unIdDisponibilite; 
                 DELETE FROM reservation WHERE id = :unId ; ";

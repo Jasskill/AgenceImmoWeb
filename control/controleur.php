@@ -222,7 +222,16 @@ class Controleur
             (new Vue)->erreur404();
         }
     }
-
+    public function mesReservationsClient()
+    {
+        if (isset($_SESSION['Client_session'])){
+            $idClient = $_SESSION['Client_session'];
+            $lesReservations = (new reservation)->recupererReservations($idClient);
+            (new Vue)->mesReservationsClient($lesReservations);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
     public function mesLogementsLoue()
     {
         if (isset($_SESSION['Proprietaire_session'])) {
