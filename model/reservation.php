@@ -17,7 +17,7 @@ class reservation
     public function recupererReservations($idClient){
         $sql = "SELECT reservation.id AS id, rue, codePostal, ville, description, idProprietaire, tarif, 
                         COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal,reservation.dateDebut, reservation.dateFin, Photo.lien AS lienPhoto,
-                        SUM(DATEDIFF(reservation.dateFin, reservation.dateDebut) * disponibilite.tarif) as Total
+                        DATEDIFF(reservation.dateFin, reservation.dateDebut) * disponibilite.tarif as Total
                 FROM reservation 
                 INNER JOIN disponibilite ON reservation.idDisponibilite = disponibilite.id 
                 INNER JOIN logement ON Logement.id = disponibilite.idLogement 
