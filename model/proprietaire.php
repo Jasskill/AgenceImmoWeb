@@ -43,6 +43,25 @@ class Proprietaire {
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
     }
+    //Afficher les disponibilité d'un logement
+    public function AffichageAjoutDisponibilite($idLogement){
+        $sql = 'SELECT * FROM disponibilite WHERE idLogement = :idLogement AND valide = 1 ';
+        $req = $this->pdo->prepare($sql);
+        $req->bindParam(':idLogement', $idLogement, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchAll();
+    }
+    //Ajouter une disponibilité au logement
+    public function ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif){
+        $sql ='INSERT INTO disponibilite (dateDebut, dateFin, idLogement, tarif, valide, derive) 
+        VALUES (:dateDebut, :dateFin, :idLogement, :tarif, 1, 1)';
+        $req = $this->pdo->prepare($sql);
+        $req->bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
+        $req->bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
+        $req->bindParam(':idLogement', $idLogement, PDO::PARAM_INT);
+        $req->bindParam(':tarif', $tarif, PDO::PARAM_INT);
+        $req->execute();
+    }
 }
 
 ?>

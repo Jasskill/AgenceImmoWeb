@@ -248,6 +248,23 @@ class Controleur
             (new Vue)->erreur404();
         }
     }
+    //Affichage et ajout d'une disponibilite avec un LOGEMENT ID coté proprio
+    public function GestionsDisponibiliteIdLogement(){
+        if (isset($_SESSION['Proprietaire_session'])){
+            $idLogement = $_GET['idLogement'];;
+            $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $dateDebut = $_POST['dateDebut'];
+                $dateFin = $_POST['dateFin'];
+                $tarif = $_POST['tarif'];
+                (new Proprietaire)->ajouterDisponibiliteLogement($idLogement, $dateDebut, $dateFin, $tarif);
+                $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+            }
+            (new Vue)->GestionsDisponibiliteIdLogement($lesDisponibilites);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
 }
 
 ?>

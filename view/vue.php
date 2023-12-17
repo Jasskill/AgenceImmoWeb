@@ -47,7 +47,6 @@ class Vue {
                         Gérer 
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Gérer mes réservations</a></li>
                         <li><a class="dropdown-item" href="index.php?action=mesLogements">Mes Logements</a></li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
@@ -59,7 +58,6 @@ class Vue {
                         Gérer 
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Gérer mes réservations</a></li>
                         <li><a class="dropdown-item" href="index.php?action=mesReservationsClient">Mes Réservations</a></li>
                         <li><a class="dropdown-item" href="index.php?action=logout">Déconnexion</a></li>
                       </ul>
@@ -80,7 +78,6 @@ class Vue {
             </div>
           </nav>';
   }
-  
   // ACCUEIL UTILISATEUR AVEC LES ANNONCES 
   public function accueil($lesAnnonces, $message = null) {
     $this->entete();
@@ -112,7 +109,6 @@ class Vue {
         echo '</div></div></div>';
         $this->fin();
     }
-
     // RECHERCHE RECHERCHE RECHERCHE RECHERCHE RECHERCHE 
     public function recherche($lesRecherche){
       $this->entete();
@@ -191,7 +187,6 @@ class Vue {
     ";
     $this->fin();
   }
-
   // RECHERCHE -> RECHERCHE  -> RECHERCHE
   public function recherchedeux() {
     $this->entete();
@@ -204,8 +199,6 @@ class Vue {
 
     $this->fin();
   }
-
-
   // PAGE INSCRIPTION -> PAGE INSCRIPTION  -> PAGE INSCRIPTION 
   public function inscription($message = null) {
     $this->entete();
@@ -289,7 +282,7 @@ class Vue {
     </div>';
     $this->fin();
   }
-
+  // PAGE SI ON ARRIVE A RESERVER
   public function succesReservation(){
       $this->entete();
 
@@ -305,7 +298,6 @@ class Vue {
 
       $this->fin();
   }
-
   // PAGE ANNONCE ACCESSIBLE VIA LA NAVBAR
   public function mesannonces($lesAnnonces) {
     $this->entete();
@@ -339,48 +331,43 @@ class Vue {
     </div>';
     $this->fin();
   }
-
-
-  
   public function reservation($lesReservations) {
     $this->entete();
 
     echo '
   <div class="container d-flex justify-content-center main-content">
-  <div class="container-fluid bg-transparent my-4 p-3">
+    <div class="container-fluid bg-transparent my-4 p-3">
       <div class="row">';
       foreach($lesReservations as $reservation) {
         echo '
-                          <div class="col-md-4 mb-4">
-                            <div class="card carte h-100">
-                              <div class="card-body">
-                                <h5 class="card-text">'.$reservation["description"].'</h5>
-                                <h6 class="card-text">'.$reservation["codePostal"]." ".$reservation["ville"].'</h6>
-                                <img class="card-img img-fluid" src="./images/'.$reservation["lienPhoto"].'">
-                              </div>
-                              <div class="mx-3 mb-3">
-                                <a class="float-end" href="index.php?action=annulerReservation&id='.$reservation["id"].'">
-                                  <i class="fa-solid  text-danger">Annuler la Reservation</i>
-                                </a>
-                              </div>
-                            </div>
-                          </div>';
+          <div class="col-md-4 mb-4">
+            <div class="card carte h-100">
+              <div class="card-body">
+                <h5 class="card-text">'.$reservation["description"].'</h5>
+                <h6 class="card-text">'.$reservation["codePostal"]." ".$reservation["ville"].'</h6>
+                <img class="card-img img-fluid" src="./images/'.$reservation["lienPhoto"].'">
+              </div>
+              <div class="mx-3 mb-3">
+                <a class="float-end" href="index.php?action=annulerReservation&id='.$reservation["id"].'">
+                  <i class="fa-solid  text-danger">Annuler la Reservation</i>
+                </a>
+              </div>
+            </div>
+          </div>';
           }
     echo '
-        </div>
-  </div>
+      </div>
+    </div>
   </div>';
 
     $this->fin();
   }
-
   // DROP DOWN BUTTON -> PROPRIETAIRES -> VOIR MES LOGEMENTS 
   public function mesLogements($lesLogements){
     $this->entete();
     echo '<div class="container d-flex justify-content-center main-content">';
     echo '<div class="container-fluid bg-transparent my-4 p-3">';
     echo '<div class="row">';
-
     foreach ($lesLogements as $logement) {
         echo '
             <div class="col-md-12 mb-4">
@@ -393,7 +380,7 @@ class Vue {
                         </div>
                         <div class="mt-auto">
                           <i>Gérer les disponibilités</i>
-                          <a class="float-end" href="index.php?action=#"><i class="fa-solid fa-arrow-right text-noir"></i></a>
+                          <a class="float-end" href="index.php?action=GestionsDisponibiliteIdLogement&idLogement='.$logement["id"].'"><i class="fa-solid fa-arrow-right text-noir"></i></a>
                         </div>
                         <div class="mt-auto">
                           <i>Gérer les réservations</i>
@@ -403,7 +390,6 @@ class Vue {
                 </div>
             </div>';
     }
-
     echo '</div></div></div>';
     $this->fin();
   }
@@ -450,6 +436,50 @@ class Vue {
         </div>';
       $this->fin();
   }
+  //AFFICHAGE DES DISPONIBILITES QUAND MON PROPRIO CLIQUE SUR GERER LES DISPO
+  public function GestionsDisponibiliteIdLogement($lesDisponibilites){
+    $this->entete();
+    $idLogement = $lesDisponibilites[0]['idLogement'];
+    echo '
+        <div class="container d-flex justify-content-center main-content">
+          <div class="container-fluid bg-transparent my-4 p-3">
+            <div class="row">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Ajouter une nouvelle disponibilité </h5>
+                  <form action="?action=GestionsDisponibiliteIdLogement&idLogement='.$idLogement.'" method="post">
+                    <label for="dateDebut"> Date de début : </label>
+                    <input type="date" name="dateDebut" required>
+                    <label for="dateFin"> Date de fin : </label>
+                    <input type="date" name="dateFin" required>
+                    <label for="tarif"> Tarif souhaité : </label>
+                    <input type="number" name="tarif" required>
+                    <input type="submit" value="Ajouter">
+                  </form>
+                </div>
+              </div>';
+            $numeroDisponibilite = 1;
+            foreach($lesDisponibilites as $disponibilites){
+              echo '
+              <div class ="col-md-12 mb-4">
+                <div class="card flex-row">
+                  <div class="card-body d-flex flex-column">
+                    <h4 class="card-title h5 h4-sm">Disponibilité N°'.$numeroDisponibilite.'</h4>
+                    </br>
+                    <p> Date de début :'.$disponibilites['dateDebut'].'</p>
+                    <p> Date de fin :'.$disponibilites['dateFin'].'</p>
+                  </div>
+                </div>
+              </div>';
+              $numeroDisponibilite++;
+            }
+    echo '  </div>
+          </div>
+        </div>
+    ';  
+    $this->fin();  
+  }
+  //AFFICHAGE DES RESERVATIONS QUAND MON PROPRIETAIRE CLIQUE SUR GERER LES RESERVATIONS DUN LOG.
   public function GestionsReservationIdLogement($lesReservations){
     $this->entete();
     echo '
@@ -487,9 +517,6 @@ class Vue {
         </div>';
         $this->fin();
   }
-
-
-
   public function erreur404() {
     http_response_code(404);
     $this->entete();
