@@ -257,8 +257,12 @@ class Controleur
                 $dateDebut = $_POST['dateDebut'];
                 $dateFin = $_POST['dateFin'];
                 $tarif = $_POST['tarif'];
-                (new Proprietaire)->ajouterDisponibiliteLogement($idLogement, $dateDebut, $dateFin, $tarif);
+                try {
+                (new Proprietaire)->ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif);
                 $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+                } catch (Exception $e){
+                    echo 'Ereur : '.$e->getMessage();
+                }
             }
             (new Vue)->GestionsDisponibiliteIdLogement($lesDisponibilites);
         }else{

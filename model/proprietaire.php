@@ -54,7 +54,7 @@ class Proprietaire {
     //Ajouter une disponibilité au logement
     public function ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif){
         $sql ='INSERT INTO disponibilite (dateDebut, dateFin, idLogement, tarif, valide, derive) 
-        VALUES (:dateDebut, :dateFin, :idLogement, :tarif, 1, 1)';
+        VALUES (:dateDebut, :dateFin, :idLogement, :tarif, 1, null)';
         $req = $this->pdo->prepare($sql);
         $req->bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
         $req->bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
