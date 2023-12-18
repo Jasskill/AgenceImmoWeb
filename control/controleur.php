@@ -226,6 +226,7 @@ class Controleur
             (new Vue)->erreur404();
         }
     }
+    // Reservations cote clients
     public function mesReservationsClient()
     {
         if (isset($_SESSION['Client_session'])){
@@ -236,14 +237,35 @@ class Controleur
             (new Vue)->erreur404();
         }
     }
-    public function mesLogementsLoue()
-    {
-        if (isset($_SESSION['Proprietaire_session'])) {
-            $idProprietaire = $_SESSION['Proprietaire_session'];
-            var_dump($idProprietaire);
-            $lesReservations = (new Proprietaire)->mesLogementsLoue($idProprietaire);
-            (new Vue)->mesLogementsLoue($lesReservations);
-        } else {
+    //Reservation avec un LOGEMENTID passer en paramètre (coté proprioétaire)
+    public function GestionsReservationIdLogement(){
+        if(isset($_SESSION['Proprietaire_session']) && isset($_GET['idLogement'])){
+            $idProprietaire = (int)$_SESSION['Proprietaire_session'];
+            $idLogement = $_GET['idLogement'];
+            $lesReservations = (new proprietaire)->mesLogementsLoue($idProprietaire, $idLogement);
+            (new Vue)->GestionsReservationIdLogement($lesReservations);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
+    //Affichage et ajout d'une disponibilite avec un LOGEMENT ID coté proprio
+    public function GestionsDisponibiliteIdLogement(){
+        if (isset($_SESSION['Proprietaire_session'])){
+            $idLogement = $_GET['idLogement'];;
+            $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $dateDebut = $_POST['dateDebut'];
+                $dateFin = $_POST['dateFin'];
+                $tarif = $_POST['tarif'];
+                try {
+                (new Proprietaire)->ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif);
+                $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+                } catch (Exception $e){
+                    echo 'Ereur : '.$e->getMessage();
+                }
+            }
+            (new Vue)->GestionsDisponibiliteIdLogement($lesDisponibilites);
+        }else{
             (new Vue)->erreur404();
         }
     }
