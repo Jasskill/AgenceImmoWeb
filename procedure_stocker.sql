@@ -2,12 +2,13 @@ DROP PROCEDURE IF EXISTS fusion;
 DROP PROCEDURE IF EXISTS nouvelle_dates_anterieur;
 DROP PROCEDURE IF EXISTS nouvelle_dates_posterieur;
 DROP PROCEDURE IF EXISTS supprimer_reservation;
+DROP PROCEDURE IF EXISTS get_last;
 
 DELIMITER $$
 
 CREATE PROCEDURE supprimer_reservation(idReservation INT)
 BEGIN
-    DECLARE countDispoDerive, idDispo, idDispoDerive1, idDispoDerive2, idDispoDerive3, idReserv1, idFus1, idFus2, count INT;
+    DECLARE countDispoDerive, idDispo, idDispoDerive1, idDispoDerive2, idDispoDerive3, idDispoDerive4, idReserv1, idFus1, idFus2, count INT;
     DECLARE idDispoDate DATE;
 
     DECLARE IdateDebut, IdateFin DATETIME;
@@ -227,9 +228,31 @@ BEGIN
             );
 
             UPDATE disponibilite SET derive = idDispo WHERE id = idDispoDerive3;
+            CALL get_last(idDispoDerive3, idDispoDerive4);
+            CALL fusion(idDispoDerive3, idDispoDerive2);
+            CALL nouvelle_dates_anterieur(idDispoDerive4);
+        ELSE
+
+            SET IdateDebut = (SELECT dateFin FROM reservation WHERE id = idReserv1);
+            SET IdateFin = (SELECT dateFin FROM disponibilite WHERE id = idDispo);
+            SET IidLogement = (SELECT idLogement FROM disponibilite WHERE id = idDispo);
+            SET Itarif = (SELECT tarif FROM disponibilite WHERE id = idDispo);
+
+            INSERT INTO disponibilite(dateDebut, dateFin, idLogement, tarif, valide, derive) VALUES (IdateDebut, IdateFin, IidLogement, Itarif, 1, idDispo);
+
+            SELECT id INTO idDispoDerive3
+            FROM disponibilite 
+            WHERE derive = idDispo AND dateDebut = IdateDebut AND dateFin = IdateFin;
+
+            CALL get_last(idDispoDerive3, idDispoDerive4);
 
             CALL fusion(idDispoDerive3, idDispoDerive2);
+
+            CALL nouvelle_dates_anterieur(idDispoDerive4);
         END IF;
+
+
+
         DELETE FROM disponibilite WHERE id = idDispoDerive1 OR id = idDispoDerive2;
     ELSE
         DELETE FROM disponibilite WHERE derive = idDispo;
@@ -317,6 +340,8 @@ BEGIN
         -- On modifie la dateFin de cette nouvelle disponibilité pour qu'elle reprenne celle de idDispo2
         SET idDispoDate = (SELECT dateFin FROM disponibilite WHERE id = idDispo2);
         UPDATE disponibilite SET dateFin = idDispoDate WHERE id = idDispo1;
+
+        UPDATE disponibilite SET valide = 0 WHERE id = idDispo1;
     END IF;
 END$$
 
@@ -362,8 +387,12 @@ END$$
 CREATE PROCEDURE nouvelle_dates_anterieur(idDispo1 INT)
 BEGIN
 
-    DECLARE count, idDispoNew INT;
+    DECLARE count, idDispoNew, idReserv INT;
     DECLARE idDispoDate DATETIME;
+
+    DECLARE IdateDebut, IdateFin DATETIME;
+    DECLARE IidLogement INT;
+    DECLARE Itarif DECIMAL(10,2);
 
     -- Récupère le nombre de disponibilité dont la derive est celle en paramètre 
     -- ET dont la date de fin se passe avant celle de début de la reservation de la disponibilité
@@ -394,7 +423,51 @@ BEGIN
 
         -- On rappelle la fonction pour qu'elle face pareille avec la dérivé
         call nouvelle_dates_anterieur(idDispoNew);
+    ELSEIF (SELECT COUNT(*) FROM reservation WHERE idDisponibilite = idDispo1) = 1 THEN
+        SELECT id INTO idReserv FROM reservation WHERE idDisponibilite = idDispo1;
+
+        SET IdateDebut = (SELECT dateDebut FROM disponibilite WHERE id = idDispo1);
+        SET IdateFin = (SELECT dateDebut FROM reservation WHERE id = idReserv);
+        SET IidLogement = (SELECT idLogement FROM disponibilite WHERE id = idDispo2);
+        SET Itarif = (SELECT tarif FROM disponibilite WHERE id = idDispo2);
+
+        -- On insère une disponibilité dans le cas où il n'y en a pas.
+        INSERT INTO disponibilite(dateDebut, dateFin, idLogement, tarif, valide, derive) VALUES (IdateDebut, IdateFin, IidLogement, Itarif, 1, idDispo1);
     END IF;
 END$$
 
+CREATE PROCEDURE get_last(idDispo INT, OUT idOut INT)
+BEGIN
+    
+    DECLARE count, idDispoNew, idOut2 INT;
+
+    SELECT COUNT(*) INTO count 
+        FROM disponibilite 
+        WHERE derive = idDispo AND dateDebut >= (
+            SELECT dateFin 
+            FROM reservation 
+            WHERE idDisponibilite = idDispo
+        );
+
+    -- On vérifie que la dérivé de la disponibilité en paramètre existe
+    IF count = 1 THEN
+
+        -- Si elle existe, alors sauvegarde dans une variable l'id de la disponibilité dérivé
+        SELECT id INTO idDispoNew 
+        FROM disponibilite 
+        WHERE derive = idDispo AND dateDebut >= (
+            SELECT dateFin 
+            FROM reservation 
+            WHERE idDisponibilite = idDispo
+        );
+
+        CALL get_last(idDispoNew, idOut2);
+
+        SET idOut = idOut2;
+        
+    ELSE
+        SET idOut = idDispo;
+    END IF;
+
+END$$
 DELIMITER ;
