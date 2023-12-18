@@ -14,6 +14,9 @@ BEGIN
     DECLARE IidLogement INT;
     DECLARE Itarif DECIMAL(10,2);
 
+    -- Augmenter la limite récursive
+    SET max_sp_recursion_depth = 100;
+
     -- Sauvegarde dans (idDispo) l'idDisponibilite de la reservation qu'on veut supprimer
     SELECT idDisponibilite INTO idDispo 
     FROM reservation 
@@ -134,7 +137,7 @@ BEGIN
                 SELECT dateDebut INTO idDispoDate FROM disponibilite WHERE id = idDispo;
 
                 -- Modifie la dateFin pour qu'elle corresponde à celle de (idDispo)
-                UPDATE disponibilite SET dateDebut = dateDebut WHERE id = idDispoDerive3;
+                UPDATE disponibilite SET dateDebut = idDispoDate WHERE id = idDispoDerive3;
 
                 -- Répète cette opération pour toutes les reservations qui sont dérivé de (idDispoDerive3)
                 CALL nouvelle_dates_anterieur(idDispoDerive3);
@@ -159,18 +162,20 @@ BEGIN
         -- Supprime la disponibilité dérivé de idDispo
         DELETE FROM disponibilite WHERE id = idDispoDerive1;
     ELSEIF countDispoDerive = 2 THEN
-        -- idDispoDerive1 = 2
+
+        -- Sauvegarder dans (idDispoDerive1) la 1er disponibilité dérivé de (idDispo)
         SELECT id INTO idDispoDerive1 
         FROM disponibilite 
         WHERE derive = idDispo 
         LIMIT 1;
 
+        -- Sauvegarder dans (idDispoDerive2) la 2e disponibilité dérivé de (idDispo)
         SELECT id INTO idDispoDerive2 
         FROM disponibilite 
         WHERE derive = idDispo 
         LIMIT 1 OFFSET 1;
 
-        -- idReserv1 = 2
+        -- Sauvegarder dans (idReserv1) la reservation (idDispoDerive1)
         SELECT id INTO idReserv1 
         FROM reservation 
         WHERE idDisponibilite = idDispoDerive1;
@@ -198,7 +203,7 @@ BEGIN
                 WHERE id = idReserv1
             );
 
-            UPDATE disponibilite SET derive = idDispo WHERE derive = idDispoDerive3;
+            UPDATE disponibilite SET derive = idDispo WHERE id = idDispoDerive3;
         END IF;
 
         -- Vérifie s'il y a une dérivée de idDispoDerive1 avec des dates postérieures à idReserv1
@@ -212,14 +217,8 @@ BEGIN
         );
 
         IF count = 1 THEN
-            -- IL SE PASSE QUOI ICI ?????
-            SELECT idDispoDerive3
-            FROM disponibilite 
-            WHERE derive = idDispoDerive1 AND dateDebut >= idDispoDerive3;
 
-            UPDATE disponibilite SET derive = idDispo WHERE derive = idDispoDerive3;
-
-            SELECT id INTO idFus1 
+            SELECT id INTO idDispoDerive3
             FROM disponibilite 
             WHERE derive = idDispoDerive1 AND dateDebut >= (
                 SELECT dateFin 
@@ -227,15 +226,9 @@ BEGIN
                 WHERE id = idReserv1
             );
 
-            SELECT id INTO idFus2
-            FROM disponibilite 
-            WHERE derive = idDispo AND dateDebut >= (
-                SELECT dateFin 
-                FROM reservation 
-                WHERE id = idReservation
-            );
-            
-            CALL fusion(idFus1, idFus2);
+            UPDATE disponibilite SET derive = idDispo WHERE id = idDispoDerive3;
+
+            CALL fusion(idDispoDerive3, idDispoDerive2);
         END IF;
         DELETE FROM disponibilite WHERE id = idDispoDerive1 OR id = idDispoDerive2;
     ELSE
@@ -244,6 +237,10 @@ BEGIN
     END IF;
 
     DELETE FROM reservation WHERE id = idReservation;
+
+    -- Réinitialiser la limite récursive à sa valeur par défaut
+    SET max_sp_recursion_depth = DEFAULT;
+
 END$$
 
 
