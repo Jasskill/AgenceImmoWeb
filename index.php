@@ -45,8 +45,8 @@ if(isset($_GET["action"])) {
         case "demandeReservation":
             (new controleur)->demandeReservation();
             break;
-        case "succesReservation":
-            (new controleur)->succesReservation();
+        case "succes":
+            (new controleur)->succes();
             break;
         case "reservation":
             (new controleur)->reservation();

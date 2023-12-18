@@ -38,10 +38,7 @@ class reservation
     }
 // Permet d'annuler pour le client 
     public function annulerReservation($id){
-        $sql = "SELECT disponibilite.id AS ID 
-                FROM reservation
-                INNER JOIN disponibilite ON reservation.idDisponibilite = disponibilite.id 
-                WHERE reservation.id = :unId";
+        $sql = "CALL supprimer_reservation(:unId)";
         $req = $this->pdo->prepare($sql);
         $req->bindParam(":unId", $id, \PDO::PARAM_INT);
         $res = $req->execute();
@@ -50,13 +47,6 @@ class reservation
         }else{
             return false;
         }
-        $sql = "DELETE FROM disponibilite WHERE derive = :unIdDisponibilite; 
-                UPDATE disponibilite SET valide = 1 WHERE id = :unIdDisponibilite; 
-                DELETE FROM reservation WHERE id = :unId ; ";
-        $req = $this->pdo->prepare($sql);
-        $req->bindParam(":unId", $id, \PDO::PARAM_INT);
-        $req->bindParam(":unIdDisponibilite", $resultat["ID"], \PDO::PARAM_INT);
-        $res = $req->execute();
     }
 
     //Calculer tarif

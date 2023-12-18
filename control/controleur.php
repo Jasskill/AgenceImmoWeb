@@ -80,9 +80,8 @@ class Controleur
                 if (!$utilisateur->dejaInscrit($mail)) {
                     $res = $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
                     if ($res) {
-                        (new vue)->connexion();
-                        $message = 'Inscription réussie !';
-                        echo "<script type='text/javascript'>window.alert('" . $message . "');</script>";
+                        $message = 'Inscription réussie ! Connectez-vous !';
+                        $this->succes($message);
                     } else {
                         (new vue)->erreur("L'inscription a échoué, veuillez réessayer plus tard");
                     }
@@ -119,7 +118,7 @@ class Controleur
                     if ($dateFin != $annonce["lesDisponibilites"]["dateFin"]) {
                         (new annonce)->creerDisponibilite($dateFin, $annonce["lesDisponibilites"]["dateFin"], $annonce["id"], $annonce["lesDisponibilites"]["tarif"], $idD);
                     }
-                    header("Location: index.php?action=succesReservation");
+                    header("Location: index.php?action=succes&id=0");
                     exit;
                 } else {
                     $this->connexion("Veuiller vous connecter");
@@ -152,13 +151,23 @@ class Controleur
     public function annulerReservation(){
         if(isset($_GET["id"])){
             (new reservation)->annulerReservation($_GET["id"]);
+            $this->succes("Reservation Annulé !");
         }else{
             (new vue)->erreur404();
         }
     }
 
-    public function succesReservation(){
-        (new vue)->succesReservation();
+    public function succes($message = null){
+        if(isset($_GET["id"])){
+            if($_GET["id"] == 0){
+                (new vue)->succes(" Reservation Effectué !");
+            }else{
+                (new vue)->succes($message);
+            }
+        }else{
+            (new vue)->succes($message);
+        }
+        
     }
 
     public function recupereDate($date)

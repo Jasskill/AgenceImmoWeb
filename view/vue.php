@@ -258,11 +258,15 @@ class Vue {
                             <div class="row">
                                 <div class="col-md-4">
                                   </br>
-                                    <h6>première colonne</h6>
+                                    <h4>Détails : </h4>
+                                    <p> Nombre de pièces : '.$annonce["nbPieces"].' </p>
+                                    <p> Surface : '.$annonce["surfaceTotal"].' m²</p>
                                 </div>
                                 <div class="col-md-4">
                                   </br>
-                                    <h6>deuxième colonne</h6>
+                                  <h4>Disponibilités : </h4>
+                                  <p> Du : '.$date1.' </p>
+                                  <p> Au : '.$date2.' </p>
                                 </div>
                                 <div class="col-md-4">
                                   </br>
@@ -283,14 +287,17 @@ class Vue {
     $this->fin();
   }
   // PAGE SI ON ARRIVE A RESERVER
-  public function succesReservation(){
+  public function succes($message = null){
       $this->entete();
 
       echo '
       <div class="container d-flex justify-content-center main-content">
           <div class="container-fluid bg-transparent my-4 p-1" style="position:relative;">
-              <div class="row">
-              <h1> Reservation Effectué !</h1>
+              <div class="row">'; 
+              if($message != null){
+                echo '<h1>'.$message.'</h1>';
+              }
+              echo '
               <a class="a" href="index.php?action=accueil">Accueil</a>
               </div>
           </div>
@@ -422,7 +429,7 @@ class Vue {
                       <div class="mt-auto">
                         <i>Référence :'.$reservationclient["id"].'</i>
                         <a class="float-end" href="index.php?action=annulerReservation&id='.$reservationclient["id"] . '">
-                          <i class="fa-solid fa-arrow-right text-noir"></i>
+                          ! Annuler la reservation !
                         </a>
                       </div>
                     </div>
