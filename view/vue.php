@@ -202,9 +202,7 @@ class Vue {
   // PAGE INSCRIPTION -> PAGE INSCRIPTION  -> PAGE INSCRIPTION 
   public function inscription($message = null) {
     $this->entete();
-    if($message != null) {
-      echo "<div class='alert alert-danger' role='alert'>".$message."</div>";
-    }
+    
     echo "
       <div class='d-flex justify-content-center main-content'>
         <form method='POST' action='index.php?action=inscription'>
@@ -238,6 +236,11 @@ class Vue {
         </form>
       </div>
     ";
+    if($message != null) {
+      echo "<div class='d-flex justify-content-center main-content'>
+              <div class='alert alert-danger' role='alert'>".$message."</div>
+            </div>";
+    }
     $this->fin();
   }
   // DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION  DEMANDE DE RESERVATION 
@@ -253,7 +256,7 @@ class Vue {
                           <div class="text-center">
                             <h1>' . $annonce["description"] . '</h1>
                             <h3>' . $annonce["codePostal"] . ' - <b><i>' . $annonce["ville"] . '</b></i></h3>
-                            <img class="custom-imgreservation" src="./images/' . $annonce["lesPhotos"][0]["lien"] . '">
+                            <img class="img-fluid" src="./images/' . $annonce["lesPhotos"][0]["lien"] . '">
                           </div>
                             <div class="row">
                                 <div class="col-md-4">
@@ -507,7 +510,7 @@ class Vue {
                           <p>Logement : '.$reservationlogement["logementDescription"].'<p>
                         </div>
                         <div class"mt auto">
-                          <a class="float-end" href="index.php?action=#&id='.$reservationlogement["id"].'">
+                          <a class="float-end" href="index.php?action=annulerReservation&id='.$reservationlogement["id"].'">
                             Annuler la réservation
                           </a>
                         </div>
@@ -517,7 +520,7 @@ class Vue {
                   ';
                 }
               }else{
-                echo '<p> aucune données </p>';
+                echo '<h2> Ce Logement ne possède pas de reservation pour le moment </h2>';
               }
       echo '</div>
           </div>

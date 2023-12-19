@@ -42,7 +42,7 @@ class annonce
 
     public function recupererUneAnnonce($id)
     {
-        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal 
+        $sql = "SELECT Logement.id AS id, rue, codePostal, ville, description, idProprietaire, COUNT(Piece.id) AS nbPieces, SUM(surface) AS surfaceTotal, tarif 
                 FROM Logement 
                 INNER JOIN Piece ON Logement.id = Piece.idLogement
                 INNER JOIN disponibilite ON Logement.id = disponibilite.idLogement 

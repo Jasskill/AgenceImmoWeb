@@ -69,28 +69,32 @@ class Controleur
             $mdp = htmlspecialchars($_POST['mdp']);
             $mdp2 = htmlspecialchars($_POST['mdp2']);
 
-            if ($mdp == $mdp2) {
-                $nom = htmlspecialchars($_POST['nom']);
-                $prenom = htmlspecialchars($_POST['prenom']);
-                $mail = htmlspecialchars($_POST['mail']);
-                $mdpHash = password_hash($mdp, PASSWORD_BCRYPT);
-
-                $utilisateur = new Utilisateur();
-
-                if (!$utilisateur->dejaInscrit($mail)) {
-                    $res = $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
-                    if ($res) {
-                        $message = 'Inscription réussie ! Connectez-vous !';
-                        $this->succes($message);
+            if(preg_match("/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#%^&*()\$_+÷%§€\-=\[\]{}|;':\",.\/<>?~`]).{12,}$/", $mdp)){
+                if ($mdp == $mdp2) {
+                    $nom = htmlspecialchars($_POST['nom']);
+                    $prenom = htmlspecialchars($_POST['prenom']);
+                    $mail = htmlspecialchars($_POST['mail']);
+                    $mdpHash = password_hash($mdp, PASSWORD_BCRYPT);
+    
+                    $utilisateur = new Utilisateur();
+    
+                    if (!$utilisateur->dejaInscrit($mail)) {
+                        $res = $utilisateur->inscription($mdpHash, $nom, $prenom, $mail);
+                        if ($res) {
+                            $message = 'Inscription réussie ! Connectez-vous !';
+                            $this->succes($message);
+                        } else {
+                            (new vue)->erreur("<b>ERREUR</b> : L'inscription a échoué, veuillez réessayer plus tard");
+                        }
+    
                     } else {
-                        (new vue)->erreur("L'inscription a échoué, veuillez réessayer plus tard");
+                        (new vue)->inscription("<b>ERREUR</b> : Le mail est déjà associé à un autre compte !");
                     }
-
                 } else {
-                    (new vue)->inscription("Le mail est déjà associé à un autre compte !");
+                    (new vue)->inscription("<b>ERREUR</b> : Les deux mots de passe ne sont pas identiques !");
                 }
-            } else {
-                (new vue)->inscription("Les deux mots de passe ne sont pas identiques !");
+            }else{
+                (new vue)->inscription("<b>ERREUR</b> : Le mot de passe est trop simple, il doit contenir au moins une minuscule, une majuscule, un chiffre, un caractère spécial et avoir une taille minimale de 12");
             }
         } else {
             (new vue)->inscription();
@@ -170,6 +174,60 @@ class Controleur
         
     }
 
+    public function mesLogements()
+    {
+        if (isset($_SESSION['Proprietaire_session'])) {
+            $idProprietaire = $_SESSION['Proprietaire_session'];
+            $lesLogements = (new Proprietaire)->lesLogements($idProprietaire);
+            (new Vue)->mesLogements($lesLogements);
+        } else {
+            (new Vue)->erreur404();
+        }
+    }
+    // Reservations cote clients
+    public function mesReservationsClient()
+    {
+        if (isset($_SESSION['Client_session'])){
+            $idClient = $_SESSION['Client_session'];
+            $lesReservations = (new reservation)->recupererReservations($idClient);
+            (new Vue)->mesReservationsClient($lesReservations);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
+    //Reservation avec un LOGEMENTID passer en paramètre (coté proprioétaire)
+    public function GestionsReservationIdLogement(){
+        if(isset($_SESSION['Proprietaire_session']) && isset($_GET['idLogement'])){
+            $idProprietaire = (int)$_SESSION['Proprietaire_session'];
+            $idLogement = $_GET['idLogement'];
+            $lesReservations = (new proprietaire)->mesLogementsLoue($idProprietaire, $idLogement);
+            (new Vue)->GestionsReservationIdLogement($lesReservations);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
+    //Affichage et ajout d'une disponibilite avec un LOGEMENT ID coté proprio
+    public function GestionsDisponibiliteIdLogement(){
+        if (isset($_SESSION['Proprietaire_session'])){
+            $idLogement = $_GET['idLogement'];;
+            $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $dateDebut = $_POST['dateDebut'];
+                $dateFin = $_POST['dateFin'];
+                $tarif = $_POST['tarif'];
+                try {
+                (new Proprietaire)->ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif);
+                $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
+                } catch (Exception $e){
+                    echo 'Ereur : '.$e->getMessage();
+                }
+            }
+            (new Vue)->GestionsDisponibiliteIdLogement($lesDisponibilites);
+        }else{
+            (new Vue)->erreur404();
+        }
+    }
+
     public function recupereDate($date)
     {
         $dateTab = explode("-", $date);
@@ -223,60 +281,6 @@ class Controleur
         $stringDate .= $dateTab[0];
 
         return $stringDate;
-    }
-
-    public function mesLogements()
-    {
-        if (isset($_SESSION['Proprietaire_session'])) {
-            $idProprietaire = $_SESSION['Proprietaire_session'];
-            $lesLogements = (new Proprietaire)->lesLogements($idProprietaire);
-            (new Vue)->mesLogements($lesLogements);
-        } else {
-            (new Vue)->erreur404();
-        }
-    }
-    // Reservations cote clients
-    public function mesReservationsClient()
-    {
-        if (isset($_SESSION['Client_session'])){
-            $idClient = $_SESSION['Client_session'];
-            $lesReservations = (new reservation)->recupererReservations($idClient);
-            (new Vue)->mesReservationsClient($lesReservations);
-        }else{
-            (new Vue)->erreur404();
-        }
-    }
-    //Reservation avec un LOGEMENTID passer en paramètre (coté proprioétaire)
-    public function GestionsReservationIdLogement(){
-        if(isset($_SESSION['Proprietaire_session']) && isset($_GET['idLogement'])){
-            $idProprietaire = (int)$_SESSION['Proprietaire_session'];
-            $idLogement = $_GET['idLogement'];
-            $lesReservations = (new proprietaire)->mesLogementsLoue($idProprietaire, $idLogement);
-            (new Vue)->GestionsReservationIdLogement($lesReservations);
-        }else{
-            (new Vue)->erreur404();
-        }
-    }
-    //Affichage et ajout d'une disponibilite avec un LOGEMENT ID coté proprio
-    public function GestionsDisponibiliteIdLogement(){
-        if (isset($_SESSION['Proprietaire_session'])){
-            $idLogement = $_GET['idLogement'];;
-            $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
-            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-                $dateDebut = $_POST['dateDebut'];
-                $dateFin = $_POST['dateFin'];
-                $tarif = $_POST['tarif'];
-                try {
-                (new Proprietaire)->ajouterDisponibiliteLogement($dateDebut, $dateFin, $idLogement, $tarif);
-                $lesDisponibilites = (new Proprietaire)->AffichageAjoutDisponibilite($idLogement);
-                } catch (Exception $e){
-                    echo 'Ereur : '.$e->getMessage();
-                }
-            }
-            (new Vue)->GestionsDisponibiliteIdLogement($lesDisponibilites);
-        }else{
-            (new Vue)->erreur404();
-        }
     }
 }
 
