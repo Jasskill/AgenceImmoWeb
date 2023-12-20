@@ -264,6 +264,7 @@ class Vue {
                                     <h4>Détails : </h4>
                                     <p> Nombre de pièces : '.$annonce["nbPieces"].' </p>
                                     <p> Surface : '.$annonce["surfaceTotal"].' m²</p>
+                                    <p> Tarif : '.$annonce["tarif"].' €</p>
                                 </div>
                                 <div class="col-md-4">
                                   </br>
